@@ -62,3 +62,7 @@ GSM Instruction Set:
     - RS.push(PC) | PC <- IR.lit
 19. RET
     - PC <- RS.pop()
+
+### MISC
+
+20. HALT
