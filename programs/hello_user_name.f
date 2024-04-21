@@ -1,6 +1,4 @@
-: word 1 * ;
-
-variable buffer 256 word allot 
+variable buffer sallot 255
 
 : get_name 1 begin
   dup key dup 13 = if
