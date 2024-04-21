@@ -35,22 +35,36 @@ GSM Instruction Set:
 11. MOD
     - TOS <- TOS % DS.pop()
 
+### LOGIC OPERATION
+12. NOT
+    - TOS <- ~TOS
+13. OR
+    - TOS <- TOS or DS.pop()
+14. AND
+    - TOS <- TOS and DS.pop()
+
+### COMPARE OPERATION
+15. EQUAL
+    - Z <- TOS or DS.pop()
+    - | IF(Z==1): TOS <- 1
+      | ELSE: TOS <- 0
+
 ### BRANCHING, LOOPING & RETURN STACK
 
-12. JMPNZ (ADDR)
+16. JMPZ (ADDR)
     - Z <- TOS | TOS <- DS.pop()
-    - | IF(Z==0): PC <- IR.lit  
-13. JMP (ADDR)
+    - | IF(Z==1): PC <- IR.lit  
+17. JMP (ADDR)
     - PC <- IR.lit
-14. STASH
+18. STASH
     - RS.push(TOS) | TOS <- DS.pop()
-15. UNSTASH
+19. UNSTASH
     - DS.push(TOS)
     - TOS <- RS.pop()
-16. CPSTASH //COPY STASH
+20. CPSTASH //COPY STASH
     - DS.push(TOS)
     - TOS <- RS
-17. LOOP (ADDR)
+21. LOOP (ADDR)
     - DS.push(TOS)
     - TOS <- RS.pop() 
     - Z <- (TOS + 1) - RS
@@ -58,11 +72,11 @@ GSM Instruction Set:
 
       | ELSE: RS.push(TOS + 1) | TOS <- DS.pop()
 ### PROCEDURES
-18. CALL (ADDR)
+22. CALL (ADDR)
     - RS.push(PC) | PC <- IR.lit
-19. RET
+23. RET
     - PC <- RS.pop()
 
 ### MISC
 
-20. HALT
+24. HALT

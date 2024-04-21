@@ -2,7 +2,7 @@
 from enum import Enum
 
 
-class Opcode(Enum):
+class Opcode(str, Enum):
     """
     Enum values are defined but used mostly as commentary.
     In end json file symbolic name is used
@@ -19,8 +19,13 @@ class Opcode(Enum):
     MUL = "multiply"
     DIV = "divide"
     MOD = "modulo"
+    NOT = "inversion"
+    OR = "or"
+    AND = "and"
 
-    JMPNZ = "jump on no zero"
+    EQUAL = "equal"
+
+    JMPZ = "jump on zero"
     JMP = "jump"
     STASH = "stash"
     UNSTASH = "unstash"
@@ -31,3 +36,4 @@ class Opcode(Enum):
     RET = "return"
 
     HALT = "halt"
+
