@@ -71,6 +71,7 @@ PRIMITIVE_WORDS ={
     "+":    Opcode.ADD,
     "-":    Opcode.SUB,
     "*":    Opcode.MUL,
+    "/":    Opcode.DIV,
     "mod":  Opcode.MOD,
     "or":   Opcode.OR,
     "and":  Opcode.AND,
@@ -144,11 +145,15 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
                     add_print(section, data, word_starts, str_literals.pop(0))
                 else:
                     raise SyntaxError(f"No literal provided for : {token} | (ln:{line_n}, wrd num:{token_n})") 
-            case '.' | 'emit':
+            case 'emit':
                 section.push_range([
                     {'opcode': Opcode.PUSH, 'operand': IO_MEM_ADRESS},
                     {'opcode': Opcode.STORE}
                 ])
+            case '.':
+                if '.' not in word_starts:
+                    preamble.add_print_num(word, word_starts, data, IO_MEM_ADRESS)
+                section.push({'opcode': Opcode.CALL, 'operand': word_starts['.']})     
             case 'key':
                 section.push_range([
                     {'opcode': Opcode.PUSH, 'operand': IO_MEM_ADRESS},

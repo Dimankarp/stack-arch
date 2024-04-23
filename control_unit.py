@@ -71,7 +71,7 @@ mProgram = [
   [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() * dp._TOS), TOSLatch.ALU],
   [mPCJump(0, True, False)],
   #DIV
-  [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() / dp._TOS), TOSLatch.ALU],
+  [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() // dp._TOS), TOSLatch.ALU],
   [mPCJump(0, True, False)],
   #MOD
   [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() % dp._TOS), TOSLatch.ALU],
