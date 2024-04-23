@@ -4,7 +4,7 @@ import json
 import re
 import sys
 import preamble
-from isa import Opcode
+from isa import Opcode, write_code
 
 class MemoryAddress():
     def __init__(self, start_obj: dict, offset: int):
@@ -128,9 +128,10 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
             continue
 
         #Comments
-        if token[0] == '(':
-            while token_stack.pop()[-1]['token'] != ')':
+        if token == '(':
+            while len(token_queue) > 0 and token_queue.pop(0).val[-1] != ')':
                 pass
+            continue
 
         match token:
             #------------------------------  
@@ -201,7 +202,6 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
             case 'if':
                 if ':' not in map(lambda x: x['token'], token_stack):
                   raise SyntaxError(f"Conditionals are only allowed in word definitions | (ln:{line_n}, wrd num:{token_n})")
-                
                 jz_instr = {'opcode': Opcode.JMPZ}
                 section.push(jz_instr)
                 token_stack.append({'token' : 'if', 'instr_obj': jz_instr})
@@ -210,7 +210,7 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
                     raise SyntaxError(f"Failed to complete if-else-then tree at (ln:{line_n}, wrd num:{token_n})| Check for opened \"if\"")
                  end_jmp_instr = {"opcode": Opcode.JMP}
                  section.push(end_jmp_instr)
-                 token_stack[-1]['token'] = section.offset_addr()
+                 token_stack[-1]['instr_obj']['operand'] = section.offset_addr()
                  token_stack.append({'token' : 'else', 'instr_obj': end_jmp_instr})
             case 'then':
                 if len(token_stack) == 0 or token_stack[-1]['token'] != 'if' and token_stack[-1]['token'] != 'else':
@@ -237,6 +237,11 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
             case 'do':
                 if ':' not in map(lambda x: x['token'], token_stack):
                     raise SyntaxError(f'Do-loop is only allowed in word definitions | (ln:{line_n}, wrd num:{token_n})')
+                section.push_range([
+                    #Since first on DS is start, and it should be last on RS
+                    {"opcode": Opcode.SWAP},
+                    {"opcode": Opcode.STASH},
+                    {"opcode": Opcode.STASH}])
                 token_stack.append({'token' : 'do', 'addr': section.offset_addr()})
             case 'i':
                 if 'do' not in map(lambda x: x['token'], token_stack):
@@ -286,15 +291,16 @@ def transpilate(src: str) -> list:
 
     main_cycle(src, instructions, data, word)
 
-    word_start = IO_MEM_ADRESS + 10
-    word.set_start(word_start)
-    
-    instructions_start = word_start + word.offset()
+
+    instructions_start = IO_MEM_ADRESS + 10
     instructions.set_start(instructions_start)
 
-    data_start = instructions_start + instructions.offset()
+    word_start = instructions_start + instructions.offset()
+    word.set_start(word_start)
+    
+    data_start = word_start + word.offset()
     data.set_start(data_start)
-    return word.allocate() + instructions.allocate() + data.allocate()
+    return instructions.allocate()+ word.allocate() + data.allocate()
 
 
     
@@ -306,8 +312,7 @@ def main(src, target):
     
     code = transpilate(src)
     
-    with open(target, 'w', encoding='utf-8') as file:
-        json.dump(code, file)
+    write_code(target, code)
     print("Forthc - Transpiled successfully")
 
 if __name__ == "__main__":

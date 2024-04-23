@@ -1,4 +1,8 @@
 from enum import Enum
+import logging
+
+from exceptions import DataInterpretation, StackExcpetion
+from memory_unit import MemoryUnit
 
 
 class Stack:
@@ -13,15 +17,16 @@ class Stack:
     
     def peek(self):
         if len(self.stack) < 1:
-            raise Exception(f"Stack underflow")
+            raise StackExcpetion(f"Stack underflow")
         self._data = self.stack[-1]
     def push(self, item):
         if len(self.stack) >= self._size:
-            raise Exception("Stack overflow")  
+            raise StackExcpetion("Stack overflow")  
         self.stack.append(item)
+        self._data = self.stack[-1]
     def pop(self):
         if len(self.stack) < 1:
-            raise Exception("Stack underflow")  
+            raise StackExcpetion("Stack underflow")  
         self._data = self.stack.pop()   
 
 #I think writing all the methods & stuff
@@ -47,7 +52,7 @@ class PCLatch(Enum):
     PLUS1 = 2
 
 class Datapath:
-    def __init__(self, start_adr: int, memory):
+    def __init__(self, start_adr: int, memory: MemoryUnit):
         self._DS: Stack = Stack(128)
         self._RS: Stack = Stack(128)
 
@@ -60,44 +65,58 @@ class Datapath:
 
         self._Mem = memory
     
+    def __repr__(self) -> str:
+      datapath_state = f'TOS: {self._TOS} PC: {self._PC} ALU: {self._ALU}'
+      ds_stack = f'DS (LEN: {len(self._DS.stack)}): {self._DS.stack[:-(min(4, len(self._DS.stack))+1):-1]}...'
+      rs_stack = f'RS (LEN: {len(self._RS.stack)}): {self._RS.stack[:-(min(4, len(self._RS.stack))+1):-1]}...'
+      instr = f'Instruction: {self._IR}'
+
+      return f'{datapath_state}\n{ds_stack}\n{rs_stack}\n{instr}'
+
     def ds_push(self):
-        self._DS.push(self._ALU.data)
+        self._DS.push(self._ALU)
     def ds_pop(self):
         self._DS.pop()
     def ds_peek(self):
         self._DS.peek()
 
     def rs_push(self, mux: RSPush):
-        self._RS.push(self._ALU.data if mux == RSPush.ALU else self._PC )
+        self._RS.push(self._ALU if mux == RSPush.ALU else self._PC )
     def rs_pop(self):
         self._RS.pop()
     def rs_peek(self):
-        self._RS.pop()
+        self._RS.peek()
     
     def tos_latch(self, mux: TOSLatch):
         match mux:
             case TOSLatch.DS:
                 self._TOS = self._DS.data()
             case TOSLatch.MEM:
-                assert False, "TO DO"
+                self._TOS = self._Mem._data
             case TOSLatch.IR:
                 val = self._IR["operand"] if "operand" in self._IR else self._IR["data"]
                 self._TOS = val
             case TOSLatch.ALU:
-                self._TOS = self._ALU.data
+                self._TOS = self._ALU
+        if not isinstance(self._TOS, int):
+            logging.warning("Instructions in TOS: %s", self._TOS)
+            raise DataInterpretation(f"Instructions in TOS: {self._TOS}")
     
     def alu_do_opeation(self, op):
-        self._ALU.data = op(self)
+        self._ALU = op(self)
 
     def set_z(self):
-        self._Z = self._ALU.data == 0
+        self._Z = self._ALU == 0
     
     def ir_latch(self):
-        assert False, "TO DO"
+        self._IR = self._Mem._data
+        if not 'opcode' in self._IR:
+            logging.warning("Data in IR: %s", self._IR)
+            raise DataInterpretation(f"Data in IR: {self._IR}")
     def pc_latch(self, mux: PCLatch):
         match mux:
             case PCLatch.ALU:
-                self._PC = self._ALU.data
+                self._PC = self._ALU
             case PCLatch.IR:
                 self._PC = self._IR["operand"] if "operand" in self._IR else self._IR["data"]
             case PCLatch.PLUS1:

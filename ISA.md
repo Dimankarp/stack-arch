@@ -66,9 +66,9 @@ GSM Instruction Set:
     - DS.push(TOS)
     - TOS <- RS.pop() 
     - Z <- (TOS + 1) - RS
-    - | IF(Z==1): RS.pop() | PC <- IR.lit | TOS <- DS.pop()
+    - | IF(Z==1): RS.pop() | TOS <- DS.pop()
 
-      | ELSE: RS.push(TOS + 1) | TOS <- DS.pop()
+      | ELSE: RS.push(TOS + 1) | TOS <- DS.pop() | PC <- IR.lit 
 ### PROCEDURES
 21. CALL (ADDR)
     - RS.push(PC) | PC <- IR.lit

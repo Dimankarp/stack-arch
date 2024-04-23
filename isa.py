@@ -1,5 +1,6 @@
 
 from enum import Enum
+import json
 
 
 class Opcode(str, Enum):
@@ -36,3 +37,18 @@ class Opcode(str, Enum):
 
     HALT = "halt"
 
+def write_code(file, code):
+    with open(file, "w", encoding="utf-8") as file:
+        buf = []
+        for instr in code:
+            buf.append(json.dumps(instr))
+        file.write("[" + ",\n ".join(buf) + "]")
+
+def read_code(file):
+    with open(file, encoding="utf-8") as file:
+        code = json.loads(file.read())
+
+    for instr in code:
+        if 'opcode'in instr:
+            instr['opcode'] = Opcode(instr['opcode'])
+    return code
