@@ -26,11 +26,9 @@ class Stack:
 
 #I think writing all the methods & stuff
 # would violate the simplicity dogma
-class ALU:
-    def __init__(self):
-        self.left = 0
-        self.right = 0
-        self.data = 0
+class ALUOp:
+    def __init__(self, op):
+        self.op = op
 
 #Enums required in datapath functions
 #(functional enum syntax is avoided since
@@ -43,9 +41,6 @@ class TOSLatch(Enum):
     MEM = 1,
     IR = 2,
     ALU = 3
-class ALULatch(Enum):
-    RS = 0,
-    DS = 1,
 class PCLatch(Enum):
     ALU = 0,
     IR = 1,
@@ -57,7 +52,7 @@ class Datapath:
         self._RS: Stack = Stack(128)
 
         self._TOS: int = 0
-        self._ALU: ALU = ALU()
+        self._ALU: int = 0
         self._Z: bool = True
 
         self._IR: map = {} #Instructions are maps
@@ -91,12 +86,8 @@ class Datapath:
             case TOSLatch.ALU:
                 self._TOS = self._ALU.data
     
-    def alu_left_latch(self, mux: ALULatch):
-        self._ALU.left = self._DS.data() if mux == ALULatch.DS else self._RS.data()
-    def alu_right_latch(self):
-        self._ALU.right = self._TOS
     def alu_do_opeation(self, op):
-        self._ALU.data = op(self._ALU.left, self._ALU.right)
+        self._ALU.data = op(self)
 
     def set_z(self):
         self._Z = self._ALU.data == 0

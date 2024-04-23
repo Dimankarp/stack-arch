@@ -25,46 +25,44 @@ GSM Instruction Set:
 ### ARITHMETIC OPERATIONS
 
 7. ADD
-    - TOS <- TOS + DS.pop()
+    - TOS <- DS.pop() + TOS 
 8. SUB
-    - TOS <- TOS - DS.pop()
+    - TOS <- DS.pop() - TOS 
 9. MUL
-    - TOS <- TOS * DS.pop()
+    - TOS <- DS.pop() * TOS
 10. DIV
-    - TOS <- TOS / DS.pop()
+    - TOS <- DS.pop() / TOS
 11. MOD
-    - TOS <- TOS % DS.pop()
+    - TOS <- DS.pop() % TOS
 
 ### LOGIC OPERATION
-12. NOT
-    - TOS <- ~TOS
-13. OR
+12. OR
     - TOS <- TOS or DS.pop()
-14. AND
+13. AND
     - TOS <- TOS and DS.pop()
 
 ### COMPARE OPERATION
-15. EQUAL
+14. EQUAL
     - Z <- TOS or DS.pop()
     - | IF(Z==1): TOS <- 1
       | ELSE: TOS <- 0
 
 ### BRANCHING, LOOPING & RETURN STACK
 
-16. JMPZ (ADDR)
+15. JMPZ (ADDR)
     - Z <- TOS | TOS <- DS.pop()
     - | IF(Z==1): PC <- IR.lit  
-17. JMP (ADDR)
+16. JMP (ADDR)
     - PC <- IR.lit
-18. STASH
+17. STASH
     - RS.push(TOS) | TOS <- DS.pop()
-19. UNSTASH
+18. UNSTASH
     - DS.push(TOS)
     - TOS <- RS.pop()
-20. CPSTASH //COPY STASH
+19. CPSTASH //COPY STASH
     - DS.push(TOS)
     - TOS <- RS
-21. LOOP (ADDR)
+20. LOOP (ADDR)
     - DS.push(TOS)
     - TOS <- RS.pop() 
     - Z <- (TOS + 1) - RS
@@ -72,11 +70,11 @@ GSM Instruction Set:
 
       | ELSE: RS.push(TOS + 1) | TOS <- DS.pop()
 ### PROCEDURES
-22. CALL (ADDR)
+21. CALL (ADDR)
     - RS.push(PC) | PC <- IR.lit
-23. RET
+22. RET
     - PC <- RS.pop()
 
 ### MISC
 
-24. HALT
+23. HALT

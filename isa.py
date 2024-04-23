@@ -19,7 +19,6 @@ class Opcode(str, Enum):
     MUL = "multiply"
     DIV = "divide"
     MOD = "modulo"
-    NOT = "inversion"
     OR = "or"
     AND = "and"
 
