@@ -220,7 +220,7 @@ class ControlUnit:
     def simulate(self, tick_limit: int):
         try:
             while self._ticks < tick_limit:
-                logging.debug(" %s \n%s\n%s\n------------", self, self._mem, self._dp)
+                logging.debug("%s\n%s\n%s\n", self, self._mem, self._dp)
                 self._ticks += 1
                 micro_instructions = micro_program[self._mPC]
                 # Will be rewritten on mjump
@@ -235,8 +235,8 @@ class ControlUnit:
         if self._ticks >= tick_limit:
             logging.warning("Tick limit exceeded")
         output = "".join(map(chr, self._mem._write_buffer))
-        logging.info(" Output Buffer: %s", output)
-        logging.info(" Output Buffer(ASCII codes): %s", ", ".join(map(str, self._mem._write_buffer)))
+        logging.info("Output Buffer: %s", output)
+        logging.info("Output Buffer(ASCII codes): %s", ", ".join(map(str, self._mem._write_buffer)))
         logging.debug(" Memory Dump: %s", self._mem._mem)
         return (
             output,
@@ -244,4 +244,10 @@ class ControlUnit:
         )
 
     def __repr__(self) -> str:
-        return f"TCK: {self._ticks:3} mPC: {self._mPC:3}\n mPROG: {micro_program[self._mPC]}"
+        m_prog = ", ".join(
+            [
+                f'{type(instr).__name__}.{instr.name if isinstance(instr, Enum) else ""}'
+                for instr in micro_program[self._mPC]
+            ]
+        )
+        return f"mPROG: {m_prog}\nTCK: {self._ticks:3} mPC: {self._mPC:3}"

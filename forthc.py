@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import argparse
+import logging
 import re
 import sys
 
@@ -13,6 +15,7 @@ from forthc_exceptions import (
     IfElseTreeError,
     InvalidIntLiteralError,
     LoopVarError,
+    MissingPreambuleWordError,
     NestedWordError,
     SallotQueryError,
     UnclosedWordsError,
@@ -140,12 +143,12 @@ def parse_int_lit(token_val: str) -> int:
 
 
 def add_print(t: Translator):
-    lit = t.str_literals.pop(0)
+    lit = t.str_literals.pop(0).replace("\\n", "\n")
     # Pascal String
     data_off = t.data.push({"word": len(lit)})
     for char in lit:
         t.data.push({"word": ord(char)})
-    t.instructions.push_range(
+    t.section.push_range(
         [{"opcode": Opcode.PUSH, "operand": data_off}, {"opcode": Opcode.CALL, "operand": t.word_start['."']}]
     )
 
@@ -153,7 +156,7 @@ def add_print(t: Translator):
 def process_print(token: Token, t: Translator):
     if len(t.str_literals) > 0:
         if '."' not in t.word_start:
-            preamble.add_print_word(t.word, t.word_start, t.io_adr)
+            raise MissingPreambuleWordError('."')
         add_print(t)
     else:
         raise ExpectedStringLiteralError(token)
@@ -170,7 +173,7 @@ def process_emit(token: Token, t: Translator):
 
 def process_dot(token: Token, t: Translator):
     if "." not in t.word_start:
-        preamble.add_print_num(t.word, t.word_start, t.data, t.io_adr)
+        raise MissingPreambuleWordError(".")
     t.section.push({"opcode": Opcode.CALL, "operand": t.word_start["."]})
 
 
@@ -357,6 +360,12 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
     # An object holding current translation state
     translator = Translator(instructions, word, data, token_queue, str_literals, io_adr)
 
+    # Adding preambule (can't add it during token parsng, since word open/close shenanigans will ruin everytihng)
+    if "." in map(lambda token: token.val, token_queue):
+        preamble.add_print_num(translator.word, translator.word_start, translator.data, translator.io_adr)
+    if '."' in map(lambda token: token.val, token_queue):
+        preamble.add_print_word(translator.word, translator.word_start, translator.io_adr)
+
     while len(translator.token_queue) > 0:
         token = translator.token_queue.pop(0)
         # Primitive words
@@ -383,7 +392,7 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
     instructions.push({"opcode": Opcode.HALT})
 
 
-def translate(src: str, io_adr: int) -> list:
+def translate(src: str, io_adr: int, start_adr: int) -> list:
     # Instruction Section
     instructions = MemorySection()
 
@@ -395,7 +404,7 @@ def translate(src: str, io_adr: int) -> list:
 
     main_cycle(src, instructions, data, word, io_adr)
 
-    instructions_start = io_adr + 10
+    instructions_start = start_adr
     instructions.set_start(instructions_start)
 
     word_start = instructions_start + instructions.offset()
@@ -406,20 +415,52 @@ def translate(src: str, io_adr: int) -> list:
     return instructions.allocate() + word.allocate() + data.allocate()
 
 
-def main(src, target):
-    with open(src, encoding="utf-8") as file:
+def main(args):
+    with open(args.source, encoding="utf-8") as file:
         src = file.read()
 
-    code = translate(src, 0)
+    code = translate(src, args.io_adr, args.start_adr)
 
-    write_code(target, code)
-    print("Forthc - Transpiled successfully")
+    write_code(args.target, code)
+    logging.info("Translated successfully. Wrote to %s", args.target)
 
 
 if __name__ == "__main__":
-    assert (
-        len(sys.argv) == 3
-    ), f"Invalid number of arguments: {len(sys.argv)}. Correct use: forthc.py <input_file> <target_file>"
+    parser = argparse.ArgumentParser(
+        description="Simple forth-like language translator",
+        epilog="It's sallot and not allot here! What allot even stands for?!",
+    )
+    parser.add_argument("source", metavar="SOURCE", help="a source file with forth code to translate")
+    parser.add_argument("target", metavar="TARGET", help="a target file to write translated json to")
+    parser.add_argument(
+        "-s",
+        "--start-adr",
+        dest="start_adr",
+        type=int,
+        metavar="START_ADR",
+        required=False,
+        default=10,
+        help="an address from which the program exectuion starts (first in PC)",
+    )
+    parser.add_argument(
+        "-d",
+        "--device-adr",
+        dest="io_adr",
+        type=int,
+        metavar="IO_ADR",
+        required=False,
+        default=0,
+        help="an address mapped to the IO device",
+    )
+    args = parser.parse_args()
+    formatter = logging.Formatter("[%(levelname)s] %(message)s")
 
-    _, src, target = sys.argv
-    main(src, target)
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(formatter)
+    stdout_handler.setLevel(logging.DEBUG)
+    logger.addHandler(stdout_handler)
+
+    main(args)

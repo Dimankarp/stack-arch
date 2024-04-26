@@ -84,3 +84,8 @@ class UnknownWordError(Exception):
 class UnclosedWordsError(Exception):
     def __init__(self, token_val):
         super().__init__(f"Some tokens weren't closed. Most recent opened: {token_val}")
+
+
+class MissingPreambuleWordError(Exception):
+    def __init__(self, word: str):
+        super().__init__(f"Missing preambule word: {word}")

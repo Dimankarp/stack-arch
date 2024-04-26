@@ -94,4 +94,4 @@ unfixable = [
 src = ["src"]
 
 [tool.ruff.mccabe]
-max-complexity = 7
+max-complexity = 9

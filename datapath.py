@@ -74,10 +74,13 @@ class Datapath:
         self._Mem = memory
 
     def __repr__(self) -> str:
-        datapath_state = f"TOS: {self._TOS} PC: {self._PC} ALU: {self._ALU}"
+        datapath_state = f"TOS: {self._TOS:3} PC: {self._PC:3} ALU: {self._ALU:3}"
         ds_stack = f"DS (LEN: {len(self._DS.stack)}): {self._DS.stack[:-(min(4, len(self._DS.stack))+1):-1]}..."
         rs_stack = f"RS (LEN: {len(self._RS.stack)}): {self._RS.stack[:-(min(4, len(self._RS.stack))+1):-1]}..."
-        instr = f"Instruction: {self._IR}"
+        if "opcode" in self._IR:
+            instr = f"Instruction: {self._IR['opcode'].name} {self._IR['operand'] if 'operand' in self._IR else ''}"
+        else:
+            instr = f"Instruction: {self._IR}"
 
         return f"{datapath_state}\n{ds_stack}\n{rs_stack}\n{instr}"
 

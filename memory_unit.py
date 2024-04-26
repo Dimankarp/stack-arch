@@ -19,11 +19,14 @@ class MemoryUnit:
         self._data = 0
         self._IO_ADR = io_adr
         self._write_buffer = []
-        print(list(map(ord, read_buffer)))
         self._read_buffer = read_buffer
 
     def __repr__(self) -> str:
-        return f" AR: {self._AR:3} MEM_OUT: {self._data}"
+        if isinstance(self._data, dict):
+            mem_str = f"MEM: {self._data['opcode'].name} {self._data['operand'] if 'operand' in self._data else ''}"
+        else:
+            mem_str = f"MEM: {self._data}"
+        return f"ADR: {self._AR:3} {mem_str}"
 
     def read(self):
         if self._AR == self._IO_ADR:
