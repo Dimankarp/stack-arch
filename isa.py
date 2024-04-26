@@ -1,6 +1,5 @@
-
-from enum import Enum
 import json
+from enum import Enum
 
 
 class Opcode(str, Enum):
@@ -8,6 +7,7 @@ class Opcode(str, Enum):
     Enum values are defined but used mostly as commentary.
     In end json file symbolic name is used
     """
+
     PUSH = "push"
     POP = "pop"
     DUP = "duplicate"
@@ -37,6 +37,7 @@ class Opcode(str, Enum):
 
     HALT = "halt"
 
+
 def write_code(file, code):
     with open(file, "w", encoding="utf-8") as file:
         buf = []
@@ -44,11 +45,12 @@ def write_code(file, code):
             buf.append(json.dumps(instr))
         file.write("[" + ",\n ".join(buf) + "]")
 
+
 def read_code(file):
     with open(file, encoding="utf-8") as file:
         code = json.loads(file.read())
 
     for instr in code:
-        if 'opcode'in instr:
-            instr['opcode'] = Opcode(instr['opcode'])
+        if "opcode" in instr:
+            instr["opcode"] = Opcode(instr["opcode"])
     return code

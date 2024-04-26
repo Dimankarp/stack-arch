@@ -1,0 +1,13 @@
+[{"opcode": "call", "operand": 12, "offset": 10},
+ {"opcode": "halt", "offset": 11},
+ {"opcode": "push", "operand": 0, "offset": 12},
+ {"opcode": "fetch", "offset": 13},
+ {"opcode": "duplicate", "offset": 14},
+ {"opcode": "duplicate", "offset": 15},
+ {"opcode": "jump on zero", "offset": 16, "operand": 19},
+ {"opcode": "push", "operand": 0, "offset": 17},
+ {"opcode": "store", "offset": 18},
+ {"opcode": "push", "operand": 0, "offset": 19},
+ {"opcode": "equal", "offset": 20},
+ {"opcode": "jump on zero", "operand": 12, "offset": 21},
+ {"opcode": "return", "offset": 22}]
