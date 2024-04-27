@@ -15,9 +15,8 @@ variable buffer sallot 255
 
 get_name
 
-." Hello, "
+." \nHello, "
 
-( 1 + is used since start is 1, hence -  everything is up by 1)
 : print_name 
   buffer @ dup 0 = if
     else
