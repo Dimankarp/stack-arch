@@ -266,14 +266,14 @@ def process_leave(token: Token, t: Translator):
     headers = list(filter(lambda item: item["token"] in ["begin", "do"], reversed(t.token_stack)))
     if len(headers) == 0:
         raise BareLeaveError(token)
-    elif headers[-1]['token'] == "do":
+    elif headers[0]['token'] == "do":
         t.section.push_range([
             {"opcode": Opcode.UNSTASH},
             {"opcode": Opcode.POP},
             {"opcode": Opcode.UNSTASH},
             {"opcode": Opcode.POP}
         ])
-    header = headers[-1]
+    header = headers[0]
     jmp_inst = {"opcode": Opcode.JMP}
     t.section.push(jmp_inst)
     header["leave_jmps"] = header.get("leave_jmps", []) + [jmp_inst]
