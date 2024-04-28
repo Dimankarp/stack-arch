@@ -124,7 +124,7 @@ class Datapath:
 
     def ir_latch(self):
         self._IR = self._Mem._data
-        if "opcode" not in self._IR:
+        if not isinstance(self._IR, dict):
             raise DataAsInstructionError("IR", self._IR)
 
     def pc_latch(self, mux: PCLatch):

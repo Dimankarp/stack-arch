@@ -89,3 +89,7 @@ class UnclosedWordsError(Exception):
 class MissingPreambuleWordError(Exception):
     def __init__(self, word: str):
         super().__init__(f"Missing preambule word: {word}")
+
+class BareLeaveError(Exception):
+    def __init__(self, token):
+        super().__init__(f"Can't leave without being inside a cycle: {token.val} | (ln:{token.line}, wrd num:{token.num}) | Check for opened begin or do")

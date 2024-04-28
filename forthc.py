@@ -9,6 +9,7 @@ from forthc_exceptions import (
     BareBeginUntilError,
     BareConditionalError,
     BareDoLooplError,
+    BareLeaveError,
     BeginUntilTreeError,
     DoLoopTreeError,
     ExpectedStringLiteralError,
@@ -258,8 +259,24 @@ def process_then(token: Token, t: Translator):
     if t.token_stack[-1]["token"] == "else":
         t.token_stack.pop()
     t.token_stack.pop()
-
-
+# ------------------------------
+# Cycle leave
+# ------------------------------
+def process_leave(token: Token, t: Translator):
+    headers = list(filter(lambda item: item["token"] in ["begin", "do"], reversed(t.token_stack)))
+    if len(headers) == 0:
+        raise BareLeaveError(token)
+    elif headers[-1]['token'] == "do":
+        t.section.push_range([
+            {"opcode": Opcode.UNSTASH},
+            {"opcode": Opcode.POP},
+            {"opcode": Opcode.UNSTASH},
+            {"opcode": Opcode.POP}
+        ])
+    header = headers[-1]
+    jmp_inst = {"opcode": Opcode.JMP}
+    t.section.push(jmp_inst)
+    header["leave_jmps"] = header.get("leave_jmps", []) + [jmp_inst]
 # ------------------------------
 # Begin-until
 # ------------------------------
@@ -272,9 +289,10 @@ def process_begin(token: Token, t: Translator):
 def process_until(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "begin":
         raise BeginUntilTreeError(token)
-    begin_addr = t.token_stack.pop()
-    t.section.push({"opcode": Opcode.JMPZ, "operand": begin_addr["addr"]})
-
+    begin_header = t.token_stack.pop()
+    t.section.push({"opcode": Opcode.JMPZ, "operand": begin_header["addr"]})
+    for leave_jmp in begin_header.get("leave_jmps", []):
+        leave_jmp["operand"] = t.section.offset_addr()
 
 # ------------------------------
 # Do-Loop
@@ -302,10 +320,10 @@ def process_i(token: Token, t: Translator):
 def process_loop(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "do":
         raise DoLoopTreeError(token)
-    begin_addr = t.token_stack.pop()
-    t.section.push({"opcode": Opcode.LOOP, "operand": begin_addr["addr"]})
-
-
+    do_header = t.token_stack.pop()
+    t.section.push({"opcode": Opcode.LOOP, "operand": do_header["addr"]})
+    for leave_jmp in do_header.get("leave_jmps", []):
+        leave_jmp["operand"] = t.section.offset_addr()
 def process_lit_and_custom(token: Token, t: Translator):
     # Variable
     if token.val in t.variables:
@@ -339,6 +357,7 @@ WORD_TO_PROCESSOR = {
     "do": process_do,
     "i": process_i,
     "loop": process_loop,
+    "leave": process_leave,
 }
 
 

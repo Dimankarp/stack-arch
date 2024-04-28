@@ -3,7 +3,8 @@ variable buffer sallot 255
 : get_name 
   1 begin
     dup key dup 13 = if
-      drop 1 -  buffer ! drop 256 ( 256 is here instead of leave)
+      drop 1 -  buffer !
+      leave
     else
       swap buffer + ! 1 +
     then
