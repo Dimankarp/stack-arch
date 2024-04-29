@@ -197,9 +197,9 @@ class ControlUnit:
                 self._dp.pc_latch(signal)
 
             case MemSignal.MemWR:
-                self._mem.write(self._dp._ALU)
+                self._ticks += self._mem.write(self._dp._ALU, self._ticks)
             case MemSignal.MemRD:
-                self._mem.read()
+                self._ticks += self._mem.read(self._ticks)
 
             case ARLatch.PC:
                 self._mem._AR = self._dp._PC
@@ -235,13 +235,13 @@ class ControlUnit:
         if self._ticks >= tick_limit:
             logging.warning("Tick limit exceeded")
         output = "".join(map(chr, self._mem._write_buffer))
-        logging.info("Output Buffer: %s", output)
-        logging.info("Output Buffer(ASCII codes): %s", ", ".join(map(str, self._mem._write_buffer)))
-        logging.debug(" Memory Dump: %s", self._mem._mem)
-        return (
-            output,
-            self._ticks,
-        )
+        miss_rate = (self._mem._cache._requests - self._mem._cache._hits) / self._mem._cache._requests
+
+        logging.debug("Output Buffer: %s", output)
+        logging.debug("Output Buffer(ASCII codes): %s", ", ".join(map(str, self._mem._write_buffer)))
+        logging.debug("Memory Dump: %s", self._mem._mem)
+        logging.debug("Cache Dump: \n%s", "\n".join([f"{j.line}" for i in self._mem._cache._sets for j in i.entries]))
+        return (output, self._ticks, miss_rate)
 
     def __repr__(self) -> str:
         m_prog = ", ".join(

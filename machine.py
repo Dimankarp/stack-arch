@@ -5,17 +5,19 @@ import sys
 from control_unit import ControlUnit
 from datapath import Datapath
 from isa import read_code
-from memory_unit import MemoryUnit
+from memory_unit import Cache, MemoryUnit
 
 
 def main(args):
     code = read_code(args.source)
 
-    memory = MemoryUnit(args.io_adr, args.mem_size, code, [*args.buffer])
+    cache = Cache(64)
+    memory = MemoryUnit(args.io_adr, args.mem_size, code, [*args.buffer], cache)
     datapath = Datapath(args.start_adr, memory)
     control = ControlUnit(datapath, memory)
 
-    output, ticks = control.simulate(args.tick_limit)
+    output, ticks, miss_rate = control.simulate(args.tick_limit)
+    logging.info("Cache miss rate: %.3f%%", miss_rate * 100)
     logging.info("%s", f"Ticks: {ticks}\n{output}")
 
 
