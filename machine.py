@@ -11,7 +11,7 @@ from memory_unit import Cache, MemoryUnit
 def main(args):
     code = read_code(args.source)
 
-    cache = Cache(64)
+    cache = Cache(args.cache_size)
     memory = MemoryUnit(args.io_adr, args.mem_size, code, [*args.buffer], cache)
     datapath = Datapath(args.start_adr, memory)
     control = ControlUnit(datapath, memory)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         metavar="TICKS",
         required=False,
         default=100000,
-        help="limit to number of ticks",
+        help="limit to number of ticks. Default: 100000",
     )
     parser.add_argument(
         "-m",
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         metavar="MEM_SIZE",
         required=False,
         default=1024,
-        help="size of internal memory",
+        help="size of internal memory. Default: 1024",
     )
     parser.add_argument(
         "-s",
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         metavar="START_ADR",
         required=False,
         default=10,
-        help="an address from which the program exectuion starts (first in PC)",
+        help="an address from which the program exectuion starts (first in PC). Default: 10",
     )
     parser.add_argument(
         "-d",
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         metavar="IO_ADR",
         required=False,
         default=0,
-        help="an address mapped to the IO device",
+        help="an address mapped to the IO device. Default: 0",
     )
     parser.add_argument(
         "-j",
@@ -93,6 +93,17 @@ if __name__ == "__main__":
         required=False,
         help="file to store output in. Intercepts journal from stdout if -j is specified",
     )
+    parser.add_argument(
+        "-c",
+        "--cache_size",
+        dest="cache_size",
+        type=int,
+        metavar="SIZE",
+        required=False,
+        default=64,
+        help="size of cache in words. Must be a power of 2 and greater than 16. Default: 64",
+    )
+
 
     args = parser.parse_args()
     logging.addLevelName(logging.DEBUG, "JRNL")
