@@ -10,15 +10,15 @@ variable num
     num @
 ;
 : guess_num
-    begin dup
-    input_num ." Your choice is: " dup .
-    = if
-        ." \n You are right!\n"
-        1
-      else
-        ." \n You are wrong\n"
-        0
-    then
+    begin 
+        dup input_num ." Your choice is: " dup .
+        = if
+            ." \n You are right!\n"
+            1
+        else
+            ." \n You are wrong\n"
+            0
+        then
     until
 ;
 12 guess_num
