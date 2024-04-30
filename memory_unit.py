@@ -141,9 +141,13 @@ class MemoryUnit:
 
     def __repr__(self) -> str:
         if isinstance(self._data, dict):
-            mem_str = (
-                f"{'MEM:': >6} {self._data['opcode'].name} {self._data['operand'] if 'operand' in self._data else ''}"
+            instr_token = (
+                f"'{self._data['token']['val']}'@{self._data['token']['line']}:{self._data['token']['num']}"
+                if "token" in self._data
+                else ""
             )
+            instr_operand = f" {self._data['operand']:3}" if "operand" in self._data else ""
+            mem_str = f"{'MEM:': >6} {self._data['opcode'].name}{instr_operand}\t{instr_token}"
         else:
             mem_str = f"{'MEM:': >6} {self._data}"
         return f"{'ADR:': >6} {self._AR:5} {mem_str}"

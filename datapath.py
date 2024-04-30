@@ -83,7 +83,15 @@ class Datapath:
         ds_stack = f"DS (LEN: {len(self._DS.stack)}): {self._DS.stack[:-(min(4, len(self._DS.stack))+1):-1]}..."
         rs_stack = f"RS (LEN: {len(self._RS.stack)}): {self._RS.stack[:-(min(4, len(self._RS.stack))+1):-1]}..."
         if "opcode" in self._IR:
-            instr_state = f"{'PC:': >6} {self._PC:5} {'IR:': >6} {self._IR['opcode'].name} {self._IR['operand'] if 'operand' in self._IR else ''}"
+            instr_token = (
+                f"'{self._IR['token']['val']}'@{self._IR['token']['line']}:{self._IR['token']['num']}"
+                if "token" in self._IR
+                else ""
+            )
+            instr_operand = f" {self._IR['operand']:3}" if "operand" in self._IR else ""
+            instr_state = (
+                f"{'PC:': >6} {self._PC:5} {'IR:': >6} {self._IR['opcode'].name}{instr_operand}\t{instr_token}"
+            )
         else:
             instr_state = f"{'PC:': >6} {self._PC:5} {'IR:': >6} {self._IR}"
         return f"{data_state}\n{ds_stack}\n{rs_stack}\n{instr_state}"

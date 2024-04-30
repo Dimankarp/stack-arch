@@ -145,14 +145,17 @@ def parse_int_lit(token_val: str) -> int:
     return parsed
 
 
-def add_print(t: Translator):
+def add_print(token: Token, t: Translator):
     lit = t.str_literals.pop(0).replace("\\n", "\n")
     # Pascal String
     data_off = t.data.push({"word": len(lit)})
     for char in lit:
         t.data.push({"word": ord(char)})
     t.section.push_range(
-        [{"opcode": Opcode.PUSH, "operand": data_off}, {"opcode": Opcode.CALL, "operand": t.word_start['."']}]
+        [
+            {"opcode": Opcode.PUSH, "operand": data_off, "token": vars(token)},
+            {"opcode": Opcode.CALL, "operand": t.word_start['."'], "token": vars(token)},
+        ]
     )
 
 
@@ -160,7 +163,7 @@ def process_print(token: Token, t: Translator):
     if len(t.str_literals) > 0:
         if '."' not in t.word_start:
             raise MissingPreambuleWordError('."')
-        add_print(t)
+        add_print(token, t)
     else:
         raise ExpectedStringLiteralError(token)
     return t.section
@@ -171,17 +174,27 @@ def process_print(token: Token, t: Translator):
 
 
 def process_emit(token: Token, t: Translator):
-    t.section.push_range([{"opcode": Opcode.PUSH, "operand": t.io_adr}, {"opcode": Opcode.STORE}])
+    t.section.push_range(
+        [
+            {"opcode": Opcode.PUSH, "operand": t.io_adr, "token": vars(token)},
+            {"opcode": Opcode.STORE, "token": vars(token)},
+        ]
+    )
 
 
 def process_dot(token: Token, t: Translator):
     if "." not in t.word_start:
         raise MissingPreambuleWordError(".")
-    t.section.push({"opcode": Opcode.CALL, "operand": t.word_start["."]})
+    t.section.push({"opcode": Opcode.CALL, "operand": t.word_start["."], "token": vars(token)})
 
 
 def process_key(token: Token, t: Translator):
-    t.section.push_range([{"opcode": Opcode.PUSH, "operand": t.io_adr}, {"opcode": Opcode.FETCH}])
+    t.section.push_range(
+        [
+            {"opcode": Opcode.PUSH, "operand": t.io_adr, "token": vars(token)},
+            {"opcode": Opcode.FETCH, "token": vars(token)},
+        ]
+    )
 
     # ------------------------------
     # Variable
@@ -227,7 +240,7 @@ def process_colon(token: Token, t: Translator):
 def process_semicolon(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != ":":
         raise WordEndError(token)
-    t.section.push({"opcode": Opcode.RET})
+    t.section.push({"opcode": Opcode.RET, "token": vars(token)})
 
     t.token_stack.pop()
     # NOTE!: Chaning current section
@@ -240,7 +253,7 @@ def process_semicolon(token: Token, t: Translator):
 def process_if(token: Token, t: Translator):
     if ":" not in map(lambda x: x["token"], t.token_stack):
         raise BareConditionalError(token)
-    jz_instr = {"opcode": Opcode.JMPZ}
+    jz_instr = {"opcode": Opcode.JMPZ, "token": vars(token)}
     t.section.push(jz_instr)
     t.token_stack.append({"token": "if", "instr_obj": jz_instr})
 
@@ -248,7 +261,7 @@ def process_if(token: Token, t: Translator):
 def process_else(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "if":
         raise IfElseTreeError(token)
-    end_jmp_instr = {"opcode": Opcode.JMP}
+    end_jmp_instr = {"opcode": Opcode.JMP, "token": vars(token)}
     t.section.push(end_jmp_instr)
     t.token_stack[-1]["instr_obj"]["operand"] = t.section.offset_addr()
     t.token_stack.append({"token": "else", "instr_obj": end_jmp_instr})
@@ -272,10 +285,15 @@ def process_leave(token: Token, t: Translator):
         raise BareLeaveError(token)
     if headers[0]["token"] == "do":
         t.section.push_range(
-            [{"opcode": Opcode.UNSTASH}, {"opcode": Opcode.POP}, {"opcode": Opcode.UNSTASH}, {"opcode": Opcode.POP}]
+            [
+                {"opcode": Opcode.UNSTASH, "token": vars(token)},
+                {"opcode": Opcode.POP, "token": vars(token)},
+                {"opcode": Opcode.UNSTASH, "token": vars(token)},
+                {"opcode": Opcode.POP, "token": vars(token)},
+            ]
         )
     header = headers[0]
-    jmp_inst = {"opcode": Opcode.JMP}
+    jmp_inst = {"opcode": Opcode.JMP, "token": vars(token)}
     t.section.push(jmp_inst)
     header["leave_jmps"] = [*header.get("leave_jmps", []), jmp_inst]
 
@@ -293,7 +311,7 @@ def process_until(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "begin":
         raise BeginUntilTreeError(token)
     begin_header = t.token_stack.pop()
-    t.section.push({"opcode": Opcode.JMPZ, "operand": begin_header["addr"]})
+    t.section.push({"opcode": Opcode.JMPZ, "operand": begin_header["addr"], "token": vars(token)})
     for leave_jmp in begin_header.get("leave_jmps", []):
         leave_jmp["operand"] = t.section.offset_addr()
 
@@ -307,9 +325,9 @@ def process_do(token: Token, t: Translator):
     t.section.push_range(
         [
             # Since first on DS is start, and it should be last on RS
-            {"opcode": Opcode.SWAP},
-            {"opcode": Opcode.STASH},
-            {"opcode": Opcode.STASH},
+            {"opcode": Opcode.SWAP, "token": vars(token)},
+            {"opcode": Opcode.STASH, "token": vars(token)},
+            {"opcode": Opcode.STASH, "token": vars(token)},
         ]
     )
     t.token_stack.append({"token": "do", "addr": t.section.offset_addr()})
@@ -318,14 +336,14 @@ def process_do(token: Token, t: Translator):
 def process_i(token: Token, t: Translator):
     if "do" not in map(lambda x: x["token"], t.token_stack):
         raise LoopVarError(token)
-    t.section.push({"opcode": Opcode.CPSTASH})
+    t.section.push({"opcode": Opcode.CPSTASH, "token": vars(token)})
 
 
 def process_loop(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "do":
         raise DoLoopTreeError(token)
     do_header = t.token_stack.pop()
-    t.section.push({"opcode": Opcode.LOOP, "operand": do_header["addr"]})
+    t.section.push({"opcode": Opcode.LOOP, "operand": do_header["addr"], "token": vars(token)})
     for leave_jmp in do_header.get("leave_jmps", []):
         leave_jmp["operand"] = t.section.offset_addr()
 
@@ -333,15 +351,15 @@ def process_loop(token: Token, t: Translator):
 def process_lit_and_custom(token: Token, t: Translator):
     # Variable
     if token.val in t.variables:
-        t.section.push({"opcode": Opcode.PUSH, "operand": t.variables[token.val]})
+        t.section.push({"opcode": Opcode.PUSH, "operand": t.variables[token.val], "token": vars(token)})
     # Custom word
     elif token.val in t.word_start:
-        t.section.push({"opcode": Opcode.CALL, "operand": t.word_start[token.val]})
+        t.section.push({"opcode": Opcode.CALL, "operand": t.word_start[token.val], "token": vars(token)})
     else:
         # Integer literal
         try:
             parsed = parse_int_lit(token.val)
-            t.section.push({"opcode": Opcode.PUSH, "operand": parsed})
+            t.section.push({"opcode": Opcode.PUSH, "operand": parsed, "token": vars(token)})
         except Exception:
             raise UnknownWordError(token)  # noqa TRY200 - it's basically another token parsing branch and not lit-error-handling
 
@@ -395,7 +413,7 @@ def main_cycle(src: str, instructions: MemorySection, data: MemorySection, word:
         token = translator.token_queue.pop(0)
         # Primitive words
         if token.val in PRIMITIVE_WORDS:
-            translator.section.push({"opcode": PRIMITIVE_WORDS[token.val]})
+            translator.section.push({"opcode": PRIMITIVE_WORDS[token.val], "token": vars(token)})
             continue
 
         # Complex words
