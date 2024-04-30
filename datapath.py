@@ -69,7 +69,9 @@ class Datapath:
 
         self._TOS: int = 0
         self._ALU: int = 0
+        self._N: bool = False
         self._Z: bool = True
+        self._V: bool = False
 
         self._IR: map = {}  # Instructions are maps
         self._PC: int = start_adr
@@ -119,10 +121,23 @@ class Datapath:
             raise InstructionAsDataError("TOS", self._TOS)
 
     def alu_do_opeation(self, op):
-        self._ALU = op(self)
+        fit_mask = 2**32 - 1
 
-    def set_z(self):
-        self._Z = self._ALU == 0
+        result = op(self)
+
+        if result > 2**31 - 1 or result < -(2**31):
+            self._V = True
+            # Extracting number that fits 32 bit int
+            result = result & fit_mask
+            b = result.to_bytes(4, signed=False)
+            result = int.from_bytes(b, signed=True)
+        else:
+            self._V = False
+
+        self._Z = result == 0
+        self._N = result < 0
+
+        self._ALU = result
 
     def ir_latch(self):
         self._IR = self._Mem._data

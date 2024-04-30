@@ -37,8 +37,7 @@ DecodedAddress = namedtuple("DecodedAdr", ["word", "line", "tag"])
 class Cache:
     def __init__(self, set_size: int):
         assert set_size > LINE_SIZE * ENTRIES_PER_SET, "Set size is too small"
-        assert (set_size & (set_size - 1) == 0), "Set size must be a power of 2"
-
+        assert set_size & (set_size - 1) == 0, "Set size must be a power of 2"
 
         set_count = set_size // (LINE_SIZE * ENTRIES_PER_SET)
 

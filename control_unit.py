@@ -18,9 +18,7 @@ class DPSignal(Enum):
     RSPop = 3
     RSPeek = 4
 
-    SetZ = 6
-
-    IRLatch = 7
+    IRLatch = 6
 
 
 # Memory
@@ -39,11 +37,17 @@ class mPCLatch(Enum):  # noqa: N801 - m... stands for micro here
     PLUS1 = 2
 
 
-class mPCJump(namedtuple("mPCJump", ["adr", "uncond", "z"])):  # noqa: N801 - m... stands for micro here
+class ResStatus(Enum):
+    N = "n"
+    Z = "z"
+    V = "v"
+
+
+class mPCJump(namedtuple("mPCJump", ["adr", "uncond", "status", "status_val"])):  # noqa: N801 - m... stands for micro here
     def __repr__(self) -> str:
         if self.uncond:
             return f"mJMP {self.adr}"
-        return f"mJMPZ(z=={1 if self.z else 0}) {self.adr}"
+        return f"mJMPZ({self.status.value}=={1 if self.status_val else 0}) {self.adr}"
 
 
 micro_program = [
@@ -53,86 +57,86 @@ micro_program = [
     [mPCLatch.IR],
     # PUSH
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush, TOSLatch.IR],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # POP
     [DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # DUP
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # SWAP
     [ALUOp(lambda dp: dp._TOS), RSPush.ALU, DPSignal.DSPop, TOSLatch.DS],
     [DPSignal.RSPop, ALUOp(lambda dp: dp._RS.data()), DPSignal.DSPush],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # FETCH
     [ALUOp(lambda dp: dp._TOS), ARLatch.ALU, MemSignal.MemRD],
     [TOSLatch.MEM],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # STORE
     [ALUOp(lambda dp: dp._TOS), ARLatch.ALU],
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data()), MemSignal.MemWR],
     [DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # ADD
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() + dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # SUB
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() - dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # MUL
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() * dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # DIV
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() // dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # MOD
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() % dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # OR
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() | dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # AND
     [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() & dp._TOS), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # EQUAL
-    [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() - dp._TOS), DPSignal.SetZ],
-    [mPCJump(37, False, True)],
+    [DPSignal.DSPop, ALUOp(lambda dp: dp._DS.data() - dp._TOS)],
+    [mPCJump(37, False, ResStatus.Z, True)],
     [ALUOp(lambda dp: 0), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     [ALUOp(lambda dp: 1), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # JMPZ
-    [ALUOp(lambda dp: dp._TOS), DPSignal.SetZ, DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(42, False, False)],
+    [ALUOp(lambda dp: dp._TOS), DPSignal.DSPop, TOSLatch.DS],
+    [mPCJump(42, False, ResStatus.Z, False)],
     # JMP
     [PCLatch.IR],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # STASH
     [ALUOp(lambda dp: dp._TOS), RSPush.ALU, DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # UNSTASH
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush],
     [DPSignal.RSPop, ALUOp(lambda dp: dp._RS.data()), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # CPSTASH
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush],
     [DPSignal.RSPeek, ALUOp(lambda dp: dp._RS.data()), TOSLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # LOOP
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush],
     [DPSignal.RSPop, ALUOp(lambda dp: dp._RS.data()), TOSLatch.ALU],
-    [DPSignal.RSPeek, ALUOp(lambda dp: dp._TOS - dp._RS.data()), DPSignal.SetZ],
-    [mPCJump(57, False, False)],
+    [DPSignal.RSPeek, ALUOp(lambda dp: dp._TOS - dp._RS.data())],
+    [mPCJump(57, False, ResStatus.Z, False)],
     [DPSignal.RSPop, DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     [ALUOp(lambda dp: dp._TOS + 1), RSPush.ALU, PCLatch.IR, DPSignal.DSPop, TOSLatch.DS],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # CALL
     [RSPush.PC, PCLatch.IR],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # RET
     [DPSignal.RSPop, ALUOp(lambda dp: dp._RS.data()), PCLatch.ALU],
-    [mPCJump(0, True, False)],
+    [mPCJump(0, True, ResStatus.Z, False)],
     # HALT
     [CUSignal.Halt],
 ]
@@ -185,11 +189,8 @@ class ControlUnit:
                 self._dp.rs_peek()
             case ALUOp():
                 self._dp.alu_do_opeation(signal.op)
-            case DPSignal.SetZ:
-                self._dp.set_z()
             case DPSignal.IRLatch:
                 self._dp.ir_latch()
-
             case RSPush():
                 self._dp.rs_push(signal)
             case TOSLatch():
@@ -214,9 +215,20 @@ class ControlUnit:
                     self._mPC = opcode_to_mprog[self._dp._IR["opcode"]]
                 else:
                     raise MicrocodeJumpFailError()
-            case mPCJump(adr, uncond, z):
-                if uncond or self._dp._Z == z:
+            case mPCJump(adr, uncond, status, status_val):
+                if uncond:
                     self._mPC = adr
+                else:
+                    cond = False
+                    match status:
+                        case ResStatus.N:
+                            cond = self._dp._N == status_val
+                        case ResStatus.Z:
+                            cond = self._dp._Z == status_val
+                        case ResStatus.V:
+                            cond = self._dp._V == status_val
+                    if cond:
+                        self._mPC = adr
 
     def simulate(self, tick_limit: int):
         try:
