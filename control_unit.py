@@ -39,16 +39,17 @@ class mPCLatch(Enum):  # noqa: N801 - m... stands for micro here
     PLUS1 = 2
 
 
-mPCJump = namedtuple("mPCJump", ["adr", "uncond", "z"])
+class mPCJump(namedtuple("mPCJump", ["adr", "uncond", "z"])):  # noqa: N801 - m... stands for micro here
+    def __repr__(self) -> str:
+        if self.uncond:
+            return f"mJMP {self.adr}"
+        return f"mJMPZ(z=={1 if self.z else 0}) {self.adr}"
 
 
 micro_program = [
     # Instruction fetch
     [ARLatch.PC, MemSignal.MemRD],
-    [
-        DPSignal.IRLatch,
-        PCLatch.PLUS1,
-    ],
+    [DPSignal.IRLatch, PCLatch.PLUS1],
     [mPCLatch.IR],
     # PUSH
     [ALUOp(lambda dp: dp._TOS), DPSignal.DSPush, TOSLatch.IR],
@@ -220,7 +221,11 @@ class ControlUnit:
     def simulate(self, tick_limit: int):
         try:
             while self._ticks < tick_limit:
-                logging.debug("%s\n%s\n%s\n", self, self._mem, self._dp)
+                # Separating journal entry into lines for readability
+                lines = str(self).split("\n")
+                for line in lines[:-1]:
+                    logging.debug("%s", line)
+                logging.debug("%s\n", lines[-1])
                 self._ticks += 1
                 micro_instructions = micro_program[self._mPC]
                 # Will be rewritten on mjump
@@ -246,8 +251,10 @@ class ControlUnit:
     def __repr__(self) -> str:
         m_prog = ", ".join(
             [
-                f'{type(instr).__name__}.{instr.name if isinstance(instr, Enum) else ""}'
+                f"{type(instr).__name__}.{instr.name}" if isinstance(instr, Enum) else f"{instr}"
                 for instr in micro_program[self._mPC]
             ]
         )
-        return f"mPROG: {m_prog}\nTCK: {self._ticks:3} mPC: {self._mPC:3}"
+        return (
+            f"{'TCK:': >6} {self._ticks:5} {self._dp}\n{self._mem}\n{'mPC:': >6} {self._mPC:5} {'mPROG:': >6} {m_prog}"
+        )

@@ -202,7 +202,7 @@ def process_sallot(token: Token, t: Translator):
     try:
         parsed = parse_int_lit(query.val)
         t.data.set_offset(t.data.offset() + parsed)
-    except InvalidIntLiteralError|Exception as e:
+    except InvalidIntLiteralError | Exception as e:
         raise SallotQueryError(query) from e
     # ------------------------------
 

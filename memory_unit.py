@@ -36,8 +36,9 @@ DecodedAddress = namedtuple("DecodedAdr", ["word", "line", "tag"])
 
 class Cache:
     def __init__(self, set_size: int):
-        assert  (set_size & (set_size-1) == 0) and set_size != 0, "Set size must be a power of 2"
         assert set_size > LINE_SIZE * ENTRIES_PER_SET, "Set size is too small"
+        assert (set_size & (set_size - 1) == 0), "Set size must be a power of 2"
+
 
         set_count = set_size // (LINE_SIZE * ENTRIES_PER_SET)
 
@@ -141,10 +142,12 @@ class MemoryUnit:
 
     def __repr__(self) -> str:
         if isinstance(self._data, dict):
-            mem_str = f"MEM: {self._data['opcode'].name} {self._data['operand'] if 'operand' in self._data else ''}"
+            mem_str = (
+                f"{'MEM:': >6} {self._data['opcode'].name} {self._data['operand'] if 'operand' in self._data else ''}"
+            )
         else:
-            mem_str = f"MEM: {self._data}"
-        return f"ADR: {self._AR:3} {mem_str}"
+            mem_str = f"{'MEM:': >6} {self._data}"
+        return f"{'ADR:': >6} {self._AR:5} {mem_str}"
 
     def __fetch_and_insert(self, adr: int) -> tuple[int, object]:
         ticks = 0

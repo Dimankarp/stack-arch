@@ -104,7 +104,6 @@ if __name__ == "__main__":
         help="size of cache in words. Must be a power of 2 and greater than 16. Default: 64",
     )
 
-
     args = parser.parse_args()
     logging.addLevelName(logging.DEBUG, "JRNL")
     logging.addLevelName(logging.WARNING, "WARN")
