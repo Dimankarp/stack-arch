@@ -24,6 +24,8 @@ class Opcode(str, Enum):
     AND = "and"
 
     EQUAL = "equal"
+    LESS = "less"
+    GREATEQ = "greater or equal"
 
     JMPZ = "jump on zero"
     JMP = "jump"

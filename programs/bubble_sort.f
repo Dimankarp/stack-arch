@@ -17,8 +17,10 @@ get_data
             1 
             buffer @ 1 - 1 do
                 buffer i + @
-                buffer i + 1 + @
-                - dup 0 = swap -2147483648 and or if ( pass )
+                buffer i + 1 + @ < 
+                buffer i + @
+                buffer i + 1 + @ =
+                or if ( pass )
                 else
                     drop 0
                     buffer i + 1 + @

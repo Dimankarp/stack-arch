@@ -42,8 +42,8 @@ def add_print_num(word: MemorySection, word_starts: dict, data: MemorySection, i
     print_start = word.push_range(
         [
             {"opcode": Opcode.DUP},
-            {"opcode": Opcode.PUSH, "operand": -2147483648},
-            {"opcode": Opcode.AND},
+            {"opcode": Opcode.PUSH, "operand": 0},
+            {"opcode": Opcode.LESS},
             jmpz_instr,
             {"opcode": Opcode.PUSH, "operand": 45},
             {"opcode": Opcode.PUSH, "operand": io_mem_addr},

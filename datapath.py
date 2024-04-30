@@ -125,6 +125,9 @@ class Datapath:
 
         result = op(self)
 
+        # Here overflow is checked for with simple boundary compare
+        # Obviously it's just a model simplification and in reality
+        # bit checks are done
         if result > 2**31 - 1 or result < -(2**31):
             self._V = True
             # Extracting number that fits 32 bit int

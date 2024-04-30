@@ -1,8 +1,7 @@
 ( this method is used as . word aka 'print number' | stores on stack)
 variable counter
 : emit_num
-    dup -2147483648 ( 31st bit 1, sign checker)
-    and if ( enter if when number is negative)
+    dup 0 < if 
         45 emit ( hyphen -) -1 *
     then
     0 counter !

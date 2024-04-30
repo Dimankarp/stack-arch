@@ -132,6 +132,8 @@ PRIMITIVE_WORDS = {
     "or": Opcode.OR,
     "and": Opcode.AND,
     "=": Opcode.EQUAL,
+    "<": Opcode.LESS,
+    ">=": Opcode.GREATEQ,
 }
 
 
