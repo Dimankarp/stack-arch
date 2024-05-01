@@ -9,6 +9,7 @@ on:
       - ./*.lock
       - ./pyproject.toml
       - ./tests/*
+      - .github/workflows/python.yaml
   pull_request:
     branches:
       - master
@@ -17,6 +18,7 @@ on:
       - ./*.lock
       - ./pyproject.toml
       - ./tests/*
+      - .github/workflows/python.yaml
 defaults:
   run:
     working-directory: ./
