@@ -19,8 +19,8 @@ def test_forthc_and_machine(golden, caplog):
 
         with open(source, "w", encoding="utf-8") as file:
             file.write(golden["in_source"])
-        forthc_commands = [*golden['in_forthc_options'].split(), source, target]
-        machine_commands = [*golden['in_machine_options'].split(), "-i", golden['in_stdin'], target]
+        forthc_commands = [*golden["in_forthc_options"].split(), source, target]
+        machine_commands = [*golden["in_machine_options"].split(), "-i", golden["in_stdin"], target]
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             forthc_args = forthc.parser.parse_args(forthc_commands)
             forthc.main(forthc_args)
@@ -34,7 +34,15 @@ def test_forthc_and_machine(golden, caplog):
         if len(log_blocks) < 150:
             log = caplog.text
         else:
-            log = "\n\n".join([*log_blocks[0:50], ".....", *log_blocks[len(log_blocks)//2 - 25:len(log_blocks)//2 + 25], ".....", *log_blocks[-50:]])
+            log = "\n\n".join(
+                [
+                    *log_blocks[0:50],
+                    ".....",
+                    *log_blocks[len(log_blocks) // 2 - 25 : len(log_blocks) // 2 + 25],
+                    ".....",
+                    *log_blocks[-50:],
+                ]
+            )
         assert code == golden.out["out_code"]
         assert stdout.getvalue() == golden.out["out_stdout"]
         assert log == golden.out["out_log"]

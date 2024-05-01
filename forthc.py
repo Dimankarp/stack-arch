@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 import argparse
-import logging
 import re
-import sys
 
 from forthc_exceptions import (
     BareBeginUntilError,
@@ -82,6 +80,7 @@ class MemorySection:
 
 
 import preamble  # noqa: E402
+
 # Avoiding circular dep. - Valid since preambule module is
 # basically just a code cut out from this exact file
 # for readability sake
@@ -258,7 +257,7 @@ def process_semicolon(token: Token, t: Translator):
 def process_if(token: Token, t: Translator):
     if ":" not in map(lambda x: x["token"], t.token_stack):
         raise BareConditionalError(token)
-    jz_instr = {"opcode": Opcode.JMPZ, "operand": -1,  "token": vars(token)}
+    jz_instr = {"opcode": Opcode.JMPZ, "operand": -1, "token": vars(token)}
     t.section.push(jz_instr)
     t.token_stack.append({"token": "if", "instr_obj": jz_instr})
 
@@ -470,7 +469,7 @@ def main(args):
     code = translate(src, args.io_adr, args.start_adr)
 
     write_code(args.target, code)
-    lines_count = len(src.split('\n'))
+    lines_count = len(src.split("\n"))
     instructions_count = len(code)
     print(f"Translated successfully. Source LoC: {lines_count}  Machine Instructions: {instructions_count}")
 
