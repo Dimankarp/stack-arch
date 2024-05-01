@@ -4,9 +4,19 @@ on:
   push:
     branches:
       - master
+    paths:
+      - ./*.py
+      - ./*.lock
+      - ./pyproject.toml
+      - ./tests/*
   pull_request:
     branches:
       - master
+    paths:
+      - ./*.py
+      - ./*.lock
+      - ./pyproject.toml
+      - ./tests/*
 defaults:
   run:
     working-directory: ./
