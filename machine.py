@@ -17,93 +17,89 @@ def main(args):
     control = ControlUnit(datapath, memory)
 
     output, ticks, miss_rate = control.simulate(args.tick_limit)
-    logging.info("Cache miss rate: %.3f%%", miss_rate * 100)
-    logging.info("%s", f"Ticks: {ticks}\n{output}")
+    print(f"{output}\nCache miss rate: {miss_rate * 100:.3f}% Ticks: {ticks}")
 
 
+parser = argparse.ArgumentParser(description="Basic stack machine emulator", epilog="It's a miracle it actually runs!")
+
+parser.add_argument("source", metavar="SOURCE", help="a json file containing code to run")
+parser.add_argument(
+    "-i",
+    "--input",
+    dest="buffer",
+    type=str,
+    metavar="INPUT",
+    required=False,
+    default="",
+    help="an input buffer to pass as IO device input",
+)
+parser.add_argument(
+    "-t",
+    "--ticks",
+    dest="tick_limit",
+    type=int,
+    metavar="TICKS",
+    required=False,
+    default=100000,
+    help="limit to number of ticks. Default: 100000",
+)
+parser.add_argument(
+    "-m",
+    "--memory",
+    dest="mem_size",
+    type=int,
+    metavar="MEM_SIZE",
+    required=False,
+    default=1024,
+    help="size of internal memory. Default: 1024",
+)
+parser.add_argument(
+    "-s",
+    "--start-adr",
+    dest="start_adr",
+    type=int,
+    metavar="START_ADR",
+    required=False,
+    default=10,
+    help="an address from which the program exectuion starts (first in PC). Default: 10",
+)
+parser.add_argument(
+    "-d",
+    "--device-adr",
+    dest="io_adr",
+    type=int,
+    metavar="IO_ADR",
+    required=False,
+    default=0,
+    help="an address mapped to the IO device. Default: 0",
+)
+parser.add_argument(
+    "-j",
+    "--journal",
+    dest="journal",
+    action="store_true",
+    required=False,
+    help="whether to output execution journal: machine's state on every tick. WARNING!: This output can be very long",
+)
+parser.add_argument(
+    "-o",
+    "--output_file",
+    dest="out_file",
+    metavar="OUT",
+    required=False,
+    help="file to store output in. Intercepts journal from stdout if -j is specified",
+)
+parser.add_argument(
+    "-c",
+    "--cache_size",
+    dest="cache_size",
+    type=int,
+    metavar="SIZE",
+    required=False,
+    default=64,
+    help="size of cache in words. Must be a power of 2 and greater than 16. Default: 64",
+)
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Basic stack machine emulator", epilog="It's a miracle it actually runs!"
-    )
-
-    parser.add_argument("source", metavar="SOURCE", help="a json file containing code to run")
-    parser.add_argument(
-        "-i",
-        "--input",
-        dest="buffer",
-        type=str,
-        metavar="INPUT",
-        required=False,
-        default="",
-        help="an input buffer to pass as IO device input",
-    )
-    parser.add_argument(
-        "-t",
-        "--ticks",
-        dest="tick_limit",
-        type=int,
-        metavar="TICKS",
-        required=False,
-        default=100000,
-        help="limit to number of ticks. Default: 100000",
-    )
-    parser.add_argument(
-        "-m",
-        "--memory",
-        dest="mem_size",
-        type=int,
-        metavar="MEM_SIZE",
-        required=False,
-        default=1024,
-        help="size of internal memory. Default: 1024",
-    )
-    parser.add_argument(
-        "-s",
-        "--start-adr",
-        dest="start_adr",
-        type=int,
-        metavar="START_ADR",
-        required=False,
-        default=10,
-        help="an address from which the program exectuion starts (first in PC). Default: 10",
-    )
-    parser.add_argument(
-        "-d",
-        "--device-adr",
-        dest="io_adr",
-        type=int,
-        metavar="IO_ADR",
-        required=False,
-        default=0,
-        help="an address mapped to the IO device. Default: 0",
-    )
-    parser.add_argument(
-        "-j",
-        "--journal",
-        dest="journal",
-        action="store_true",
-        required=False,
-        help="whether to output execution journal: machine's state on every tick. WARNING!: This output can be very long",
-    )
-    parser.add_argument(
-        "-o",
-        "--output_file",
-        dest="out_file",
-        metavar="OUT",
-        required=False,
-        help="file to store output in. Intercepts journal from stdout if -j is specified",
-    )
-    parser.add_argument(
-        "-c",
-        "--cache_size",
-        dest="cache_size",
-        type=int,
-        metavar="SIZE",
-        required=False,
-        default=64,
-        help="size of cache in words. Must be a power of 2 and greater than 16. Default: 64",
-    )
-
     args = parser.parse_args()
     logging.addLevelName(logging.DEBUG, "JRNL")
     logging.addLevelName(logging.WARNING, "WARN")

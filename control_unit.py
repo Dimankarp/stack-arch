@@ -274,7 +274,8 @@ class ControlUnit:
             logging.warning("Tick limit exceeded")
         output = "".join(map(chr, self._mem._write_buffer))
         miss_rate = (self._mem._cache._requests - self._mem._cache._hits) / self._mem._cache._requests
-
+        logging.info("Cache miss rate: %.3f%%", miss_rate * 100)
+        logging.info("%s", f"Ticks: {self._ticks}\n{output}")
         logging.debug("Output Buffer: %s", output)
         logging.debug("Output Buffer(ASCII codes): %s", ", ".join(map(str, self._mem._write_buffer)))
         logging.debug("Memory Dump: %s", self._mem._mem)

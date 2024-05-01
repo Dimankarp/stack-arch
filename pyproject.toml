@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stack-processor"
-version = "0.1.0"
+version = "0.2.0"
 description = "An emulatro of a stack processor & simple forth-like language translator"
 authors = ["Dmitriy Khoroshikh <marinad1814@yandex.ru>"]
 readme = "README.md"
@@ -10,6 +10,9 @@ package-mode = false
 python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
+coverage = "^7.2.7"
+pytest = "^7.4.0"
+pytest-golden = "^0.2.2"
 ruff = "^0.1.3"
 
 [build-system]
@@ -19,7 +22,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 enable_assertion_pass_hook = true
 addopts = "--doctest-modules"
-log_format = "%(levelname)-7s %(module)s:%(funcName)-13s %(message)s"
+log_format = "[%(levelname).3s] %(message)s"
 
 
 [tool.ruff]

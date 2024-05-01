@@ -1,0 +1,1142 @@
+in_source: |-
+  variable buffer sallot 255
+
+  : get_name 
+    1 begin
+      dup key dup 13 = if
+        drop 1 -  buffer !
+        leave
+      else
+        swap buffer + ! 1 +
+      then
+      dup 256 = until
+    drop
+  ;
+
+  ." Please, enter your name and press ENTER:"
+
+  get_name
+
+  ." \nHello, "
+
+  : print_name 
+    buffer @ dup 0 = if
+      else
+        1 do 
+          buffer i + @ emit
+        loop
+      then
+  ;
+
+  print_name
+in_forthc_options: |
+  -d 0 -s 10
+in_machine_options: |-
+  -j -c 64 -m 1024 -t 20000 -d 0 -s 10
+in_stdin: "OneLoneCoder Fan\r"
+out_code: |-
+  [{"opcode": "push", "operand": 333, "token": {"val": ".\"", "line": 15, "num": 1}, "offset": 10},
+   {"opcode": "call", "operand": 17, "token": {"val": ".\"", "line": 15, "num": 1}, "offset": 11},
+   {"opcode": "call", "operand": 31, "token": {"val": "get_name", "line": 17, "num": 1}, "offset": 12},
+   {"opcode": "push", "operand": 374, "token": {"val": ".\"", "line": 19, "num": 1}, "offset": 13},
+   {"opcode": "call", "operand": 17, "token": {"val": ".\"", "line": 19, "num": 1}, "offset": 14},
+   {"opcode": "call", "operand": 58, "token": {"val": "print_name", "line": 30, "num": 1}, "offset": 15},
+   {"opcode": "halt", "offset": 16},
+   {"opcode": "duplicate", "offset": 17},
+   {"opcode": "fetch", "offset": 18},
+   {"opcode": "stash", "offset": 19},
+   {"opcode": "push", "operand": 1, "offset": 20},
+   {"opcode": "stash", "offset": 21},
+   {"opcode": "duplicate", "offset": 22},
+   {"opcode": "copy stash", "offset": 23},
+   {"opcode": "add", "offset": 24},
+   {"opcode": "fetch", "offset": 25},
+   {"opcode": "push", "operand": 0, "offset": 26},
+   {"opcode": "store", "offset": 27},
+   {"opcode": "loop", "operand": 22, "offset": 28},
+   {"opcode": "pop", "offset": 29},
+   {"opcode": "return", "offset": 30},
+   {"opcode": "push", "operand": 1, "token": {"val": "1", "line": 4, "num": 1}, "offset": 31},
+   {"opcode": "duplicate", "token": {"val": "dup", "line": 5, "num": 1}, "offset": 32},
+   {"opcode": "push", "operand": 0, "token": {"val": "key", "line": 5, "num": 2}, "offset": 33},
+   {"opcode": "fetch", "token": {"val": "key", "line": 5, "num": 2}, "offset": 34},
+   {"opcode": "duplicate", "token": {"val": "dup", "line": 5, "num": 3}, "offset": 35},
+   {"opcode": "push", "operand": 13, "token": {"val": "13", "line": 5, "num": 4}, "offset": 36},
+   {"opcode": "equal", "token": {"val": "=", "line": 5, "num": 5}, "offset": 37},
+   {"opcode": "jump on zero", "operand": 46, "token": {"val": "if", "line": 5, "num": 6}, "offset": 38},
+   {"opcode": "pop", "token": {"val": "drop", "line": 6, "num": 1}, "offset": 39},
+   {"opcode": "push", "operand": 1, "token": {"val": "1", "line": 6, "num": 2}, "offset": 40},
+   {"opcode": "subtract", "token": {"val": "-", "line": 6, "num": 3}, "offset": 41},
+   {"opcode": "push", "operand": 77, "token": {"val": "buffer", "line": 6, "num": 4}, "offset": 42},
+   {"opcode": "store", "token": {"val": "!", "line": 6, "num": 5}, "offset": 43},
+   {"opcode": "jump", "operand": 56, "token": {"val": "leave", "line": 7, "num": 1}, "offset": 44},
+   {"opcode": "jump", "operand": 52, "token": {"val": "else", "line": 8, "num": 1}, "offset": 45},
+   {"opcode": "swap", "token": {"val": "swap", "line": 9, "num": 1}, "offset": 46},
+   {"opcode": "push", "operand": 77, "token": {"val": "buffer", "line": 9, "num": 2}, "offset": 47},
+   {"opcode": "add", "token": {"val": "+", "line": 9, "num": 3}, "offset": 48},
+   {"opcode": "store", "token": {"val": "!", "line": 9, "num": 4}, "offset": 49},
+   {"opcode": "push", "operand": 1, "token": {"val": "1", "line": 9, "num": 5}, "offset": 50},
+   {"opcode": "add", "token": {"val": "+", "line": 9, "num": 6}, "offset": 51},
+   {"opcode": "duplicate", "token": {"val": "dup", "line": 11, "num": 1}, "offset": 52},
+   {"opcode": "push", "operand": 256, "token": {"val": "256", "line": 11, "num": 2}, "offset": 53},
+   {"opcode": "equal", "token": {"val": "=", "line": 11, "num": 3}, "offset": 54},
+   {"opcode": "jump on zero", "operand": 32, "token": {"val": "until", "line": 11, "num": 4}, "offset": 55},
+   {"opcode": "pop", "token": {"val": "drop", "line": 12, "num": 1}, "offset": 56},
+   {"opcode": "return", "token": {"val": ";", "line": 13, "num": 1}, "offset": 57},
+   {"opcode": "push", "operand": 77, "token": {"val": "buffer", "line": 22, "num": 1}, "offset": 58},
+   {"opcode": "fetch", "token": {"val": "@", "line": 22, "num": 2}, "offset": 59},
+   {"opcode": "duplicate", "token": {"val": "dup", "line": 22, "num": 3}, "offset": 60},
+   {"opcode": "push", "operand": 0, "token": {"val": "0", "line": 22, "num": 4}, "offset": 61},
+   {"opcode": "equal", "token": {"val": "=", "line": 22, "num": 5}, "offset": 62},
+   {"opcode": "jump on zero", "operand": 65, "token": {"val": "if", "line": 22, "num": 6}, "offset": 63},
+   {"opcode": "jump", "operand": 76, "token": {"val": "else", "line": 23, "num": 1}, "offset": 64},
+   {"opcode": "push", "operand": 1, "token": {"val": "1", "line": 24, "num": 1}, "offset": 65},
+   {"opcode": "swap", "token": {"val": "do", "line": 24, "num": 2}, "offset": 66},
+   {"opcode": "stash", "token": {"val": "do", "line": 24, "num": 2}, "offset": 67},
+   {"opcode": "stash", "token": {"val": "do", "line": 24, "num": 2}, "offset": 68},
+   {"opcode": "push", "operand": 77, "token": {"val": "buffer", "line": 25, "num": 1}, "offset": 69},
+   {"opcode": "copy stash", "token": {"val": "i", "line": 25, "num": 2}, "offset": 70},
+   {"opcode": "add", "token": {"val": "+", "line": 25, "num": 3}, "offset": 71},
+   {"opcode": "fetch", "token": {"val": "@", "line": 25, "num": 4}, "offset": 72},
+   {"opcode": "push", "operand": 0, "token": {"val": "emit", "line": 25, "num": 5}, "offset": 73},
+   {"opcode": "store", "token": {"val": "emit", "line": 25, "num": 5}, "offset": 74},
+   {"opcode": "loop", "operand": 69, "token": {"val": "loop", "line": 26, "num": 1}, "offset": 75},
+   {"opcode": "return", "token": {"val": ";", "line": 28, "num": 1}, "offset": 76},
+   {"word": 0, "offset": 77},
+   {"word": 40, "offset": 333},
+   {"word": 80, "offset": 334},
+   {"word": 108, "offset": 335},
+   {"word": 101, "offset": 336},
+   {"word": 97, "offset": 337},
+   {"word": 115, "offset": 338},
+   {"word": 101, "offset": 339},
+   {"word": 44, "offset": 340},
+   {"word": 32, "offset": 341},
+   {"word": 101, "offset": 342},
+   {"word": 110, "offset": 343},
+   {"word": 116, "offset": 344},
+   {"word": 101, "offset": 345},
+   {"word": 114, "offset": 346},
+   {"word": 32, "offset": 347},
+   {"word": 121, "offset": 348},
+   {"word": 111, "offset": 349},
+   {"word": 117, "offset": 350},
+   {"word": 114, "offset": 351},
+   {"word": 32, "offset": 352},
+   {"word": 110, "offset": 353},
+   {"word": 97, "offset": 354},
+   {"word": 109, "offset": 355},
+   {"word": 101, "offset": 356},
+   {"word": 32, "offset": 357},
+   {"word": 97, "offset": 358},
+   {"word": 110, "offset": 359},
+   {"word": 100, "offset": 360},
+   {"word": 32, "offset": 361},
+   {"word": 112, "offset": 362},
+   {"word": 114, "offset": 363},
+   {"word": 101, "offset": 364},
+   {"word": 115, "offset": 365},
+   {"word": 115, "offset": 366},
+   {"word": 32, "offset": 367},
+   {"word": 69, "offset": 368},
+   {"word": 78, "offset": 369},
+   {"word": 84, "offset": 370},
+   {"word": 69, "offset": 371},
+   {"word": 82, "offset": 372},
+   {"word": 58, "offset": 373},
+   {"word": 8, "offset": 374},
+   {"word": 10, "offset": 375},
+   {"word": 72, "offset": 376},
+   {"word": 101, "offset": 377},
+   {"word": 108, "offset": 378},
+   {"word": 108, "offset": 379},
+   {"word": 111, "offset": 380},
+   {"word": 44, "offset": 381},
+   {"word": 32, "offset": 382}]
+out_stdout: |
+  Translated successfully. Source LoC: 30  Machine Instructions: 118
+  ============================================================
+  Please, enter your name and press ENTER:
+  Hello, OneLoneCoder Fan
+  Cache miss rate: 3.977% Ticks: 5844
+out_log: |
+  [DEB]   TCK:     0   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    10    IR: {}
+  [DEB]   ADR:     0   MEM: 0
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 10 miss for 0 extra ticks
+  [DEB] Cache insert 10
+  [DEB] Memory store/fetch: 10 extra ticks
+
+  [DEB] Started PARALLEL FETCHING of 14:
+  [DEB] Cache miss on lookup 14
+  [DEB] Cache insert 14
+  [DEB] planned finish on 22 tick:
+
+  [DEB] In total CPU waited for 10 extra ticks
+
+  [DEB]   TCK:    11   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    10    IR: {}
+  [DEB]   ADR:    10   MEM: PUSH 333	'."'@15:1
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    12   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    11    IR: PUSH 333	'."'@15:1
+  [DEB]   ADR:    10   MEM: PUSH 333	'."'@15:1
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    13   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    11    IR: PUSH 333	'."'@15:1
+  [DEB]   ADR:    10   MEM: PUSH 333	'."'@15:1
+  [DEB]   mPC:     3 mPROG: ALUop, DPSignal.DSPush, TOSLatch.IR
+
+  [DEB]   TCK:    14   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    11    IR: PUSH 333	'."'@15:1
+  [DEB]   ADR:    10   MEM: PUSH 333	'."'@15:1
+  [DEB]   mPC:     4 mPROG: mJMP 0
+
+  [DEB]   TCK:    15   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    11    IR: PUSH 333	'."'@15:1
+  [DEB]   ADR:    10   MEM: PUSH 333	'."'@15:1
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 6 extra ticks
+  [DEB] Cache read 11 hit for 0 extra ticks
+  [DEB] In total CPU waited for 6 extra ticks
+
+  [DEB]   TCK:    22   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    11    IR: PUSH 333	'."'@15:1
+  [DEB]   ADR:    11   MEM: CALL  17	'."'@15:1
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    23   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    12    IR: CALL  17	'."'@15:1
+  [DEB]   ADR:    11   MEM: CALL  17	'."'@15:1
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    24   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    12    IR: CALL  17	'."'@15:1
+  [DEB]   ADR:    11   MEM: CALL  17	'."'@15:1
+  [DEB]   mPC:    75 mPROG: RSPush.PC, PCLatch.IR
+
+  [DEB]   TCK:    25   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    17    IR: CALL  17	'."'@15:1
+  [DEB]   ADR:    11   MEM: CALL  17	'."'@15:1
+  [DEB]   mPC:    76 mPROG: mJMP 0
+
+  [DEB]   TCK:    26   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    17    IR: CALL  17	'."'@15:1
+  [DEB]   ADR:    11   MEM: CALL  17	'."'@15:1
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 17 miss for 0 extra ticks
+  [DEB] Cache insert 17
+  [DEB] Memory store/fetch: 10 extra ticks
+
+  [DEB] Started PARALLEL FETCHING of 21:
+  [DEB] Cache miss on lookup 21
+  [DEB] Cache insert 21
+  [DEB] planned finish on 48 tick:
+
+  [DEB] In total CPU waited for 10 extra ticks
+
+  [DEB]   TCK:    37   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    17    IR: CALL  17	'."'@15:1
+  [DEB]   ADR:    17   MEM: DUP	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    38   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    18    IR: DUP	
+  [DEB]   ADR:    17   MEM: DUP	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    39   TOS:   333   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    18    IR: DUP	
+  [DEB]   ADR:    17   MEM: DUP	
+  [DEB]   mPC:     7 mPROG: ALUop, DPSignal.DSPush
+
+  [DEB]   TCK:    40   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    18    IR: DUP	
+  [DEB]   ADR:    17   MEM: DUP	
+  [DEB]   mPC:     8 mPROG: mJMP 0
+
+  [DEB]   TCK:    41   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    18    IR: DUP	
+  [DEB]   ADR:    17   MEM: DUP	
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 6 extra ticks
+  [DEB] Cache read 18 hit for 0 extra ticks
+  [DEB] In total CPU waited for 6 extra ticks
+
+  [DEB]   TCK:    48   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    18    IR: DUP	
+  [DEB]   ADR:    18   MEM: FETCH	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    49   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:    18   MEM: FETCH	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    50   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:    18   MEM: FETCH	
+  [DEB]   mPC:    12 mPROG: ALUop, ARLatch.ALU, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 333 miss for 0 extra ticks
+  [DEB] Cache insert 333
+  [DEB] Memory store/fetch: 10 extra ticks
+
+  [DEB] Started PARALLEL FETCHING of 337:
+  [DEB] Cache miss on lookup 337
+  [DEB] Cache insert 337
+  [DEB] planned finish on 72 tick:
+
+  [DEB] In total CPU waited for 10 extra ticks
+
+  [DEB]   TCK:    61   TOS:   333   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:   333   MEM: 40
+  [DEB]   mPC:    13 mPROG: TOSLatch.MEM
+
+  [DEB]   TCK:    62   TOS:    40   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:   333   MEM: 40
+  [DEB]   mPC:    14 mPROG: mJMP 0
+
+  [DEB]   TCK:    63   TOS:    40   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:   333   MEM: 40
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 8 extra ticks
+  [DEB] Cache read 19 hit for 0 extra ticks
+  [DEB] In total CPU waited for 8 extra ticks
+
+  [DEB]   TCK:    72   TOS:    40   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    19    IR: FETCH	
+  [DEB]   ADR:    19   MEM: STASH	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    73   TOS:    40   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    20    IR: STASH	
+  [DEB]   ADR:    19   MEM: STASH	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    74   TOS:    40   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 1): [12]...
+  [DEB]    PC:    20    IR: STASH	
+  [DEB]   ADR:    19   MEM: STASH	
+  [DEB]   mPC:    59 mPROG: ALUop, RSPush.ALU, DPSignal.DSPop, TOSLatch.DS
+
+  [DEB]   TCK:    75   TOS:   333   ALU:    40
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    20    IR: STASH	
+  [DEB]   ADR:    19   MEM: STASH	
+  [DEB]   mPC:    60 mPROG: mJMP 0
+
+  [DEB]   TCK:    76   TOS:   333   ALU:    40
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    20    IR: STASH	
+  [DEB]   ADR:    19   MEM: STASH	
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 20 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:    77   TOS:   333   ALU:    40
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    20    IR: STASH	
+  [DEB]   ADR:    20   MEM: PUSH   1	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    78   TOS:   333   ALU:    40
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    21    IR: PUSH   1	
+  [DEB]   ADR:    20   MEM: PUSH   1	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    79   TOS:   333   ALU:    40
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    21    IR: PUSH   1	
+  [DEB]   ADR:    20   MEM: PUSH   1	
+  [DEB]   mPC:     3 mPROG: ALUop, DPSignal.DSPush, TOSLatch.IR
+
+  [DEB]   TCK:    80   TOS:     1   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    21    IR: PUSH   1	
+  [DEB]   ADR:    20   MEM: PUSH   1	
+  [DEB]   mPC:     4 mPROG: mJMP 0
+
+  [DEB]   TCK:    81   TOS:     1   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    21    IR: PUSH   1	
+  [DEB]   ADR:    20   MEM: PUSH   1	
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 21 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:    82   TOS:     1   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    21    IR: PUSH   1	
+  [DEB]   ADR:    21   MEM: STASH	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:    83   TOS:     1   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    22    IR: STASH	
+  [DEB]   ADR:    21   MEM: STASH	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:    84   TOS:     1   ALU:   333
+  [DEB] DS (LEN: 2): [333, 0]...
+  [DEB] RS (LEN: 2): [40, 12]...
+  [DEB]    PC:    22    IR: STASH	
+  [DEB]   ADR:    21   MEM: STASH	
+  [DEB]   mPC:    59 mPROG: ALUop, RSPush.ALU, DPSignal.DSPop, TOSLatch.DS
+
+  [DEB]   TCK:    85   TOS:   333   ALU:     1
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [1, 40, 12]...
+  [DEB]    PC:    22    IR: STASH	
+  [DEB]   ADR:    21   MEM: STASH	
+  [DEB]   mPC:    60 mPROG: mJMP 0
+
+  .....
+
+  [DEB]   TCK:  2941   TOS:   256   ALU:  -250
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    55    IR: EQUAL	'='@11:3
+  [DEB]   ADR:    54   MEM: EQUAL	'='@11:3
+  [DEB]   mPC:    35 mPROG: ALUop, TOSLatch.ALU
+
+  [DEB]   TCK:  2942   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    55    IR: EQUAL	'='@11:3
+  [DEB]   ADR:    54   MEM: EQUAL	'='@11:3
+  [DEB]   mPC:    36 mPROG: mJMP 0
+
+  [DEB]   TCK:  2943   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    55    IR: EQUAL	'='@11:3
+  [DEB]   ADR:    54   MEM: EQUAL	'='@11:3
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 55 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2944   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    55    IR: EQUAL	'='@11:3
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2945   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    56    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2946   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    56    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:    55 mPROG: ALUop, DPSignal.DSPop, TOSLatch.DS
+
+  [DEB]   TCK:  2947   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    56    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:    56 mPROG: mJMPZ(z==0) 58
+
+  [DEB]   TCK:  2948   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    56    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:    57 mPROG: PCLatch.IR
+
+  [DEB]   TCK:  2949   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    32    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:    58 mPROG: mJMP 0
+
+  [DEB]   TCK:  2950   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    32    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    55   MEM: JMPZ  32	'until'@11:4
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 32 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2951   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    32    IR: JMPZ  32	'until'@11:4
+  [DEB]   ADR:    32   MEM: DUP	'dup'@5:1
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2952   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    33    IR: DUP	'dup'@5:1
+  [DEB]   ADR:    32   MEM: DUP	'dup'@5:1
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2953   TOS:     6   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    33    IR: DUP	'dup'@5:1
+  [DEB]   ADR:    32   MEM: DUP	'dup'@5:1
+  [DEB]   mPC:     7 mPROG: ALUop, DPSignal.DSPush
+
+  [DEB]   TCK:  2954   TOS:     6   ALU:     6
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    33    IR: DUP	'dup'@5:1
+  [DEB]   ADR:    32   MEM: DUP	'dup'@5:1
+  [DEB]   mPC:     8 mPROG: mJMP 0
+
+  [DEB]   TCK:  2955   TOS:     6   ALU:     6
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    33    IR: DUP	'dup'@5:1
+  [DEB]   ADR:    32   MEM: DUP	'dup'@5:1
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 33 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2956   TOS:     6   ALU:     6
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    33    IR: DUP	'dup'@5:1
+  [DEB]   ADR:    33   MEM: PUSH   0	'key'@5:2
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2957   TOS:     6   ALU:     6
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    34    IR: PUSH   0	'key'@5:2
+  [DEB]   ADR:    33   MEM: PUSH   0	'key'@5:2
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2958   TOS:     6   ALU:     6
+  [DEB] DS (LEN: 2): [6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    34    IR: PUSH   0	'key'@5:2
+  [DEB]   ADR:    33   MEM: PUSH   0	'key'@5:2
+  [DEB]   mPC:     3 mPROG: ALUop, DPSignal.DSPush, TOSLatch.IR
+
+  [DEB]   TCK:  2959   TOS:     0   ALU:     6
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    34    IR: PUSH   0	'key'@5:2
+  [DEB]   ADR:    33   MEM: PUSH   0	'key'@5:2
+  [DEB]   mPC:     4 mPROG: mJMP 0
+
+  [DEB]   TCK:  2960   TOS:     0   ALU:     6
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    34    IR: PUSH   0	'key'@5:2
+  [DEB]   ADR:    33   MEM: PUSH   0	'key'@5:2
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 34 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2961   TOS:     0   ALU:     6
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    34    IR: PUSH   0	'key'@5:2
+  [DEB]   ADR:    34   MEM: FETCH	'key'@5:2
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2962   TOS:     0   ALU:     6
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:    34   MEM: FETCH	'key'@5:2
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2963   TOS:     0   ALU:     6
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:    34   MEM: FETCH	'key'@5:2
+  [DEB]   mPC:    12 mPROG: ALUop, ARLatch.ALU, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] IO read: 9 extra ticks
+  [DEB] In total CPU waited for 9 extra ticks
+
+  [DEB]   TCK:  2973   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:     0   MEM: 110
+  [DEB]   mPC:    13 mPROG: TOSLatch.MEM
+
+  [DEB]   TCK:  2974   TOS:   110   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:     0   MEM: 110
+  [DEB]   mPC:    14 mPROG: mJMP 0
+
+  [DEB]   TCK:  2975   TOS:   110   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:     0   MEM: 110
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 35 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2976   TOS:   110   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    35    IR: FETCH	'key'@5:2
+  [DEB]   ADR:    35   MEM: DUP	'dup'@5:3
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2977   TOS:   110   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    36    IR: DUP	'dup'@5:3
+  [DEB]   ADR:    35   MEM: DUP	'dup'@5:3
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2978   TOS:   110   ALU:     0
+  [DEB] DS (LEN: 3): [6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    36    IR: DUP	'dup'@5:3
+  [DEB]   ADR:    35   MEM: DUP	'dup'@5:3
+  [DEB]   mPC:     7 mPROG: ALUop, DPSignal.DSPush
+
+  [DEB]   TCK:  2979   TOS:   110   ALU:   110
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    36    IR: DUP	'dup'@5:3
+  [DEB]   ADR:    35   MEM: DUP	'dup'@5:3
+  [DEB]   mPC:     8 mPROG: mJMP 0
+
+  [DEB]   TCK:  2980   TOS:   110   ALU:   110
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    36    IR: DUP	'dup'@5:3
+  [DEB]   ADR:    35   MEM: DUP	'dup'@5:3
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 36 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2981   TOS:   110   ALU:   110
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    36    IR: DUP	'dup'@5:3
+  [DEB]   ADR:    36   MEM: PUSH  13	'13'@5:4
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2982   TOS:   110   ALU:   110
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    37    IR: PUSH  13	'13'@5:4
+  [DEB]   ADR:    36   MEM: PUSH  13	'13'@5:4
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2983   TOS:   110   ALU:   110
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    37    IR: PUSH  13	'13'@5:4
+  [DEB]   ADR:    36   MEM: PUSH  13	'13'@5:4
+  [DEB]   mPC:     3 mPROG: ALUop, DPSignal.DSPush, TOSLatch.IR
+
+  [DEB]   TCK:  2984   TOS:    13   ALU:   110
+  [DEB] DS (LEN: 5): [110, 110, 6, 6]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    37    IR: PUSH  13	'13'@5:4
+  [DEB]   ADR:    36   MEM: PUSH  13	'13'@5:4
+  [DEB]   mPC:     4 mPROG: mJMP 0
+
+  [DEB]   TCK:  2985   TOS:    13   ALU:   110
+  [DEB] DS (LEN: 5): [110, 110, 6, 6]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    37    IR: PUSH  13	'13'@5:4
+  [DEB]   ADR:    36   MEM: PUSH  13	'13'@5:4
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 37 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  2986   TOS:    13   ALU:   110
+  [DEB] DS (LEN: 5): [110, 110, 6, 6]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    37    IR: PUSH  13	'13'@5:4
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  2987   TOS:    13   ALU:   110
+  [DEB] DS (LEN: 5): [110, 110, 6, 6]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    38    IR: EQUAL	'='@5:5
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  2988   TOS:    13   ALU:   110
+  [DEB] DS (LEN: 5): [110, 110, 6, 6]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    38    IR: EQUAL	'='@5:5
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:    33 mPROG: DPSignal.DSPop, ALUop
+
+  [DEB]   TCK:  2989   TOS:    13   ALU:    97
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    38    IR: EQUAL	'='@5:5
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:    34 mPROG: mJMPZ(z==1) 37
+
+  [DEB]   TCK:  2990   TOS:    13   ALU:    97
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    38    IR: EQUAL	'='@5:5
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:    35 mPROG: ALUop, TOSLatch.ALU
+
+  [DEB]   TCK:  2991   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 4): [110, 6, 6, 0]...
+  [DEB] RS (LEN: 1): [13]...
+  [DEB]    PC:    38    IR: EQUAL	'='@5:5
+  [DEB]   ADR:    37   MEM: EQUAL	'='@5:5
+  [DEB]   mPC:    36 mPROG: mJMP 0
+
+  .....
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 71 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5795   TOS:    16   ALU:    16
+  [DEB] DS (LEN: 2): [77, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    71    IR: CPSTASH	'i'@25:2
+  [DEB]   ADR:    71   MEM: ADD	'+'@25:3
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5796   TOS:    16   ALU:    16
+  [DEB] DS (LEN: 2): [77, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    72    IR: ADD	'+'@25:3
+  [DEB]   ADR:    71   MEM: ADD	'+'@25:3
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5797   TOS:    16   ALU:    16
+  [DEB] DS (LEN: 2): [77, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    72    IR: ADD	'+'@25:3
+  [DEB]   ADR:    71   MEM: ADD	'+'@25:3
+  [DEB]   mPC:    19 mPROG: DPSignal.DSPop, ALUop, TOSLatch.ALU
+
+  [DEB]   TCK:  5798   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    72    IR: ADD	'+'@25:3
+  [DEB]   ADR:    71   MEM: ADD	'+'@25:3
+  [DEB]   mPC:    20 mPROG: mJMP 0
+
+  [DEB]   TCK:  5799   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    72    IR: ADD	'+'@25:3
+  [DEB]   ADR:    71   MEM: ADD	'+'@25:3
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 72 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5800   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    72    IR: ADD	'+'@25:3
+  [DEB]   ADR:    72   MEM: FETCH	'@'@25:4
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5801   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    72   MEM: FETCH	'@'@25:4
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5802   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    72   MEM: FETCH	'@'@25:4
+  [DEB]   mPC:    12 mPROG: ALUop, ARLatch.ALU, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 93 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5803   TOS:    93   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    93   MEM: 110
+  [DEB]   mPC:    13 mPROG: TOSLatch.MEM
+
+  [DEB]   TCK:  5804   TOS:   110   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    93   MEM: 110
+  [DEB]   mPC:    14 mPROG: mJMP 0
+
+  [DEB]   TCK:  5805   TOS:   110   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    93   MEM: 110
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 73 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5806   TOS:   110   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    73    IR: FETCH	'@'@25:4
+  [DEB]   ADR:    73   MEM: PUSH   0	'emit'@25:5
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5807   TOS:   110   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    74    IR: PUSH   0	'emit'@25:5
+  [DEB]   ADR:    73   MEM: PUSH   0	'emit'@25:5
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5808   TOS:   110   ALU:    93
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    74    IR: PUSH   0	'emit'@25:5
+  [DEB]   ADR:    73   MEM: PUSH   0	'emit'@25:5
+  [DEB]   mPC:     3 mPROG: ALUop, DPSignal.DSPush, TOSLatch.IR
+
+  [DEB]   TCK:  5809   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    74    IR: PUSH   0	'emit'@25:5
+  [DEB]   ADR:    73   MEM: PUSH   0	'emit'@25:5
+  [DEB]   mPC:     4 mPROG: mJMP 0
+
+  [DEB]   TCK:  5810   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    74    IR: PUSH   0	'emit'@25:5
+  [DEB]   ADR:    73   MEM: PUSH   0	'emit'@25:5
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 74 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5811   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    74    IR: PUSH   0	'emit'@25:5
+  [DEB]   ADR:    74   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5812   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:    74   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5813   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:    74   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:    15 mPROG: ALUop, ARLatch.ALU
+
+  [DEB]   TCK:  5814   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 2): [110, 0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:     0   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:    16 mPROG: DPSignal.DSPop, ALUop, MemSignal.MemWR
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] IO write: 9 extra ticks
+  [DEB] In total CPU waited for 9 extra ticks
+
+  [DEB]   TCK:  5824   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:     0   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:    17 mPROG: DPSignal.DSPop, TOSLatch.DS
+
+  [DEB]   TCK:  5825   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:     0   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:    18 mPROG: mJMP 0
+
+  [DEB]   TCK:  5826   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:     0   MEM: STORE	'emit'@25:5
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 75 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5827   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    75    IR: STORE	'emit'@25:5
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5828   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5829   TOS:     0   ALU:   110
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    67 mPROG: ALUop, DPSignal.DSPush
+
+  [DEB]   TCK:  5830   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 3): [16, 16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    68 mPROG: DPSignal.RSPop, ALUop, TOSLatch.ALU
+
+  [DEB]   TCK:  5831   TOS:    16   ALU:    16
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    69 mPROG: DPSignal.RSPeek, ALUop
+
+  [DEB]   TCK:  5832   TOS:    16   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    70 mPROG: mJMPZ(z==0) 73
+
+  [DEB]   TCK:  5833   TOS:    16   ALU:     0
+  [DEB] DS (LEN: 1): [0]...
+  [DEB] RS (LEN: 2): [16, 16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    71 mPROG: DPSignal.RSPop, DPSignal.DSPop, TOSLatch.DS
+
+  [DEB]   TCK:  5834   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 1): [16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:    72 mPROG: mJMP 0
+
+  [DEB]   TCK:  5835   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 1): [16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    75   MEM: LOOP  69	'loop'@26:1
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 76 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5836   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 1): [16]...
+  [DEB]    PC:    76    IR: LOOP  69	'loop'@26:1
+  [DEB]   ADR:    76   MEM: RET	';'@28:1
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5837   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 1): [16]...
+  [DEB]    PC:    77    IR: RET	';'@28:1
+  [DEB]   ADR:    76   MEM: RET	';'@28:1
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5838   TOS:     0   ALU:     0
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 1): [16]...
+  [DEB]    PC:    77    IR: RET	';'@28:1
+  [DEB]   ADR:    76   MEM: RET	';'@28:1
+  [DEB]   mPC:    77 mPROG: DPSignal.RSPop, ALUop, PCLatch.ALU
+
+  [DEB]   TCK:  5839   TOS:     0   ALU:    16
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    16    IR: RET	';'@28:1
+  [DEB]   ADR:    76   MEM: RET	';'@28:1
+  [DEB]   mPC:    78 mPROG: mJMP 0
+
+  [DEB]   TCK:  5840   TOS:     0   ALU:    16
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    16    IR: RET	';'@28:1
+  [DEB]   ADR:    76   MEM: RET	';'@28:1
+  [DEB]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+  [DEB] Prefetch finishing: 0 extra ticks
+  [DEB] Cache read 16 hit for 0 extra ticks
+  [DEB] In total CPU waited for 0 extra ticks
+
+  [DEB]   TCK:  5841   TOS:     0   ALU:    16
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    16    IR: RET	';'@28:1
+  [DEB]   ADR:    16   MEM: HALT	
+  [DEB]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+  [DEB]   TCK:  5842   TOS:     0   ALU:    16
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    17    IR: HALT	
+  [DEB]   ADR:    16   MEM: HALT	
+  [DEB]   mPC:     2 mPROG: mPCLatch.IR
+
+  [DEB]   TCK:  5843   TOS:     0   ALU:    16
+  [DEB] DS (LEN: 0): []...
+  [DEB] RS (LEN: 0): []...
+  [DEB]    PC:    17    IR: HALT	
+  [DEB]   ADR:    16   MEM: HALT	
+  [DEB]   mPC:    79 mPROG: CUSignal.Halt
+
+  [WAR] Halt!
+  [INF] Cache miss rate: 3.977%
+  [INF] Ticks: 5844
+  Please, enter your name and press ENTER:
+  Hello, OneLoneCoder Fan
+  [DEB] Output Buffer: Please, enter your name and press ENTER:
+  Hello, OneLoneCoder Fan
+  [DEB] Output Buffer(ASCII codes): 80, 108, 101, 97, 115, 101, 44, 32, 101, 110, 116, 101, 114, 32, 121, 111, 117, 114, 32, 110, 97, 109, 101, 32, 97, 110, 100, 32, 112, 114, 101, 115, 115, 32, 69, 78, 84, 69, 82, 58, 10, 72, 101, 108, 108, 111, 44, 32, 79, 110, 101, 76, 111, 110, 101, 67, 111, 100, 101, 114, 32, 70, 97, 110
+  [DEB] Memory Dump: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 333, 'token': {'val': '."', 'line': 15, 'num': 1}, 'offset': 10}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 17, 'token': {'val': '."', 'line': 15, 'num': 1}, 'offset': 11}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 31, 'token': {'val': 'get_name', 'line': 17, 'num': 1}, 'offset': 12}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 374, 'token': {'val': '."', 'line': 19, 'num': 1}, 'offset': 13}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 17, 'token': {'val': '."', 'line': 19, 'num': 1}, 'offset': 14}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 58, 'token': {'val': 'print_name', 'line': 30, 'num': 1}, 'offset': 15}, {'opcode': <Opcode.HALT: 'halt'>, 'offset': 16}, {'opcode': <Opcode.DUP: 'duplicate'>, 'offset': 17}, {'opcode': <Opcode.FETCH: 'fetch'>, 'offset': 18}, {'opcode': <Opcode.STASH: 'stash'>, 'offset': 19}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'offset': 20}, {'opcode': <Opcode.STASH: 'stash'>, 'offset': 21}, {'opcode': <Opcode.DUP: 'duplicate'>, 'offset': 22}, {'opcode': <Opcode.CPSTASH: 'copy stash'>, 'offset': 23}, {'opcode': <Opcode.ADD: 'add'>, 'offset': 24}, {'opcode': <Opcode.FETCH: 'fetch'>, 'offset': 25}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'offset': 26}, {'opcode': <Opcode.STORE: 'store'>, 'offset': 27}, {'opcode': <Opcode.LOOP: 'loop'>, 'operand': 22, 'offset': 28}, {'opcode': <Opcode.POP: 'pop'>, 'offset': 29}, {'opcode': <Opcode.RET: 'return'>, 'offset': 30}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'token': {'val': '1', 'line': 4, 'num': 1}, 'offset': 31}, {'opcode': <Opcode.DUP: 'duplicate'>, 'token': {'val': 'dup', 'line': 5, 'num': 1}, 'offset': 32}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'token': {'val': 'key', 'line': 5, 'num': 2}, 'offset': 33}, {'opcode': <Opcode.FETCH: 'fetch'>, 'token': {'val': 'key', 'line': 5, 'num': 2}, 'offset': 34}, {'opcode': <Opcode.DUP: 'duplicate'>, 'token': {'val': 'dup', 'line': 5, 'num': 3}, 'offset': 35}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 13, 'token': {'val': '13', 'line': 5, 'num': 4}, 'offset': 36}, {'opcode': <Opcode.EQUAL: 'equal'>, 'token': {'val': '=', 'line': 5, 'num': 5}, 'offset': 37}, {'opcode': <Opcode.JMPZ: 'jump on zero'>, 'operand': 46, 'token': {'val': 'if', 'line': 5, 'num': 6}, 'offset': 38}, {'opcode': <Opcode.POP: 'pop'>, 'token': {'val': 'drop', 'line': 6, 'num': 1}, 'offset': 39}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'token': {'val': '1', 'line': 6, 'num': 2}, 'offset': 40}, {'opcode': <Opcode.SUB: 'subtract'>, 'token': {'val': '-', 'line': 6, 'num': 3}, 'offset': 41}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 77, 'token': {'val': 'buffer', 'line': 6, 'num': 4}, 'offset': 42}, {'opcode': <Opcode.STORE: 'store'>, 'token': {'val': '!', 'line': 6, 'num': 5}, 'offset': 43}, {'opcode': <Opcode.JMP: 'jump'>, 'operand': 56, 'token': {'val': 'leave', 'line': 7, 'num': 1}, 'offset': 44}, {'opcode': <Opcode.JMP: 'jump'>, 'operand': 52, 'token': {'val': 'else', 'line': 8, 'num': 1}, 'offset': 45}, {'opcode': <Opcode.SWAP: 'swap'>, 'token': {'val': 'swap', 'line': 9, 'num': 1}, 'offset': 46}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 77, 'token': {'val': 'buffer', 'line': 9, 'num': 2}, 'offset': 47}, {'opcode': <Opcode.ADD: 'add'>, 'token': {'val': '+', 'line': 9, 'num': 3}, 'offset': 48}, {'opcode': <Opcode.STORE: 'store'>, 'token': {'val': '!', 'line': 9, 'num': 4}, 'offset': 49}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'token': {'val': '1', 'line': 9, 'num': 5}, 'offset': 50}, {'opcode': <Opcode.ADD: 'add'>, 'token': {'val': '+', 'line': 9, 'num': 6}, 'offset': 51}, {'opcode': <Opcode.DUP: 'duplicate'>, 'token': {'val': 'dup', 'line': 11, 'num': 1}, 'offset': 52}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 256, 'token': {'val': '256', 'line': 11, 'num': 2}, 'offset': 53}, {'opcode': <Opcode.EQUAL: 'equal'>, 'token': {'val': '=', 'line': 11, 'num': 3}, 'offset': 54}, {'opcode': <Opcode.JMPZ: 'jump on zero'>, 'operand': 32, 'token': {'val': 'until', 'line': 11, 'num': 4}, 'offset': 55}, {'opcode': <Opcode.POP: 'pop'>, 'token': {'val': 'drop', 'line': 12, 'num': 1}, 'offset': 56}, {'opcode': <Opcode.RET: 'return'>, 'token': {'val': ';', 'line': 13, 'num': 1}, 'offset': 57}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 77, 'token': {'val': 'buffer', 'line': 22, 'num': 1}, 'offset': 58}, {'opcode': <Opcode.FETCH: 'fetch'>, 'token': {'val': '@', 'line': 22, 'num': 2}, 'offset': 59}, {'opcode': <Opcode.DUP: 'duplicate'>, 'token': {'val': 'dup', 'line': 22, 'num': 3}, 'offset': 60}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'token': {'val': '0', 'line': 22, 'num': 4}, 'offset': 61}, {'opcode': <Opcode.EQUAL: 'equal'>, 'token': {'val': '=', 'line': 22, 'num': 5}, 'offset': 62}, {'opcode': <Opcode.JMPZ: 'jump on zero'>, 'operand': 65, 'token': {'val': 'if', 'line': 22, 'num': 6}, 'offset': 63}, {'opcode': <Opcode.JMP: 'jump'>, 'operand': 76, 'token': {'val': 'else', 'line': 23, 'num': 1}, 'offset': 64}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'token': {'val': '1', 'line': 24, 'num': 1}, 'offset': 65}, {'opcode': <Opcode.SWAP: 'swap'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 66}, {'opcode': <Opcode.STASH: 'stash'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 67}, {'opcode': <Opcode.STASH: 'stash'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 68}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 77, 'token': {'val': 'buffer', 'line': 25, 'num': 1}, 'offset': 69}, {'opcode': <Opcode.CPSTASH: 'copy stash'>, 'token': {'val': 'i', 'line': 25, 'num': 2}, 'offset': 70}, {'opcode': <Opcode.ADD: 'add'>, 'token': {'val': '+', 'line': 25, 'num': 3}, 'offset': 71}, {'opcode': <Opcode.FETCH: 'fetch'>, 'token': {'val': '@', 'line': 25, 'num': 4}, 'offset': 72}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'token': {'val': 'emit', 'line': 25, 'num': 5}, 'offset': 73}, {'opcode': <Opcode.STORE: 'store'>, 'token': {'val': 'emit', 'line': 25, 'num': 5}, 'offset': 74}, {'opcode': <Opcode.LOOP: 'loop'>, 'operand': 69, 'token': {'val': 'loop', 'line': 26, 'num': 1}, 'offset': 75}, {'opcode': <Opcode.RET: 'return'>, 'token': {'val': ';', 'line': 28, 'num': 1}, 'offset': 76}, 16, 79, 110, 0, 0, 0, 0, 101, 67, 111, 100, 101, 114, 32, 70, 97, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {'word': 40, 'offset': 333}, {'word': 80, 'offset': 334}, {'word': 108, 'offset': 335}, {'word': 101, 'offset': 336}, {'word': 97, 'offset': 337}, {'word': 115, 'offset': 338}, {'word': 101, 'offset': 339}, {'word': 44, 'offset': 340}, {'word': 32, 'offset': 341}, {'word': 101, 'offset': 342}, {'word': 110, 'offset': 343}, {'word': 116, 'offset': 344}, {'word': 101, 'offset': 345}, {'word': 114, 'offset': 346}, {'word': 32, 'offset': 347}, {'word': 121, 'offset': 348}, {'word': 111, 'offset': 349}, {'word': 117, 'offset': 350}, {'word': 114, 'offset': 351}, {'word': 32, 'offset': 352}, {'word': 110, 'offset': 353}, {'word': 97, 'offset': 354}, {'word': 109, 'offset': 355}, {'word': 101, 'offset': 356}, {'word': 32, 'offset': 357}, {'word': 97, 'offset': 358}, {'word': 110, 'offset': 359}, {'word': 100, 'offset': 360}, {'word': 32, 'offset': 361}, {'word': 112, 'offset': 362}, {'word': 114, 'offset': 363}, {'word': 101, 'offset': 364}, {'word': 115, 'offset': 365}, {'word': 115, 'offset': 366}, {'word': 32, 'offset': 367}, {'word': 69, 'offset': 368}, {'word': 78, 'offset': 369}, {'word': 84, 'offset': 370}, {'word': 69, 'offset': 371}, {'word': 82, 'offset': 372}, {'word': 58, 'offset': 373}, {'word': 8, 'offset': 374}, {'word': 10, 'offset': 375}, {'word': 72, 'offset': 376}, {'word': 101, 'offset': 377}, {'word': 108, 'offset': 378}, {'word': 108, 'offset': 379}, {'word': 111, 'offset': 380}, {'word': 44, 'offset': 381}, {'word': 32, 'offset': 382}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [DEB] Cache Dump: 
+  [{'opcode': <Opcode.JMP: 'jump'>, 'operand': 76, 'token': {'val': 'else', 'line': 23, 'num': 1}, 'offset': 64}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'token': {'val': '1', 'line': 24, 'num': 1}, 'offset': 65}, {'opcode': <Opcode.SWAP: 'swap'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 66}, {'opcode': <Opcode.STASH: 'stash'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 67}]
+  [{'opcode': <Opcode.PUSH: 'push'>, 'operand': 1, 'offset': 20}, {'opcode': <Opcode.STASH: 'stash'>, 'offset': 21}, {'opcode': <Opcode.DUP: 'duplicate'>, 'offset': 22}, {'opcode': <Opcode.CPSTASH: 'copy stash'>, 'offset': 23}]
+  [101, 114, 32, 70]
+  [{'opcode': <Opcode.RET: 'return'>, 'token': {'val': ';', 'line': 28, 'num': 1}, 'offset': 76}, 16, 79, 110]
+  [0, 0, 0, 0]
+  [{'opcode': <Opcode.STASH: 'stash'>, 'token': {'val': 'do', 'line': 24, 'num': 2}, 'offset': 68}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 77, 'token': {'val': 'buffer', 'line': 25, 'num': 1}, 'offset': 69}, {'opcode': <Opcode.CPSTASH: 'copy stash'>, 'token': {'val': 'i', 'line': 25, 'num': 2}, 'offset': 70}, {'opcode': <Opcode.ADD: 'add'>, 'token': {'val': '+', 'line': 25, 'num': 3}, 'offset': 71}]
+  [{'opcode': <Opcode.ADD: 'add'>, 'offset': 24}, {'opcode': <Opcode.FETCH: 'fetch'>, 'offset': 25}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'offset': 26}, {'opcode': <Opcode.STORE: 'store'>, 'offset': 27}]
+  [97, 110, 0, 0]
+  [101, 76, 111, 110]
+  [101, 67, 111, 100]
+  [{'opcode': <Opcode.FETCH: 'fetch'>, 'token': {'val': '@', 'line': 25, 'num': 4}, 'offset': 72}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'token': {'val': 'emit', 'line': 25, 'num': 5}, 'offset': 73}, {'opcode': <Opcode.STORE: 'store'>, 'token': {'val': 'emit', 'line': 25, 'num': 5}, 'offset': 74}, {'opcode': <Opcode.LOOP: 'loop'>, 'operand': 69, 'token': {'val': 'loop', 'line': 26, 'num': 1}, 'offset': 75}]
+  [{'opcode': <Opcode.CALL: 'call'>, 'operand': 31, 'token': {'val': 'get_name', 'line': 17, 'num': 1}, 'offset': 12}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 374, 'token': {'val': '."', 'line': 19, 'num': 1}, 'offset': 13}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 17, 'token': {'val': '."', 'line': 19, 'num': 1}, 'offset': 14}, {'opcode': <Opcode.CALL: 'call'>, 'operand': 58, 'token': {'val': 'print_name', 'line': 30, 'num': 1}, 'offset': 15}]
+  [{'opcode': <Opcode.HALT: 'halt'>, 'offset': 16}, {'opcode': <Opcode.DUP: 'duplicate'>, 'offset': 17}, {'opcode': <Opcode.FETCH: 'fetch'>, 'offset': 18}, {'opcode': <Opcode.STASH: 'stash'>, 'offset': 19}]
+  [{'word': 82, 'offset': 372}, {'word': 58, 'offset': 373}, {'word': 8, 'offset': 374}, {'word': 10, 'offset': 375}]
+  [{'word': 72, 'offset': 376}, {'word': 101, 'offset': 377}, {'word': 108, 'offset': 378}, {'word': 108, 'offset': 379}]
+  [{'opcode': <Opcode.DUP: 'duplicate'>, 'token': {'val': 'dup', 'line': 22, 'num': 3}, 'offset': 60}, {'opcode': <Opcode.PUSH: 'push'>, 'operand': 0, 'token': {'val': '0', 'line': 22, 'num': 4}, 'offset': 61}, {'opcode': <Opcode.EQUAL: 'equal'>, 'token': {'val': '=', 'line': 22, 'num': 5}, 'offset': 62}, {'opcode': <Opcode.JMPZ: 'jump on zero'>, 'operand': 65, 'token': {'val': 'if', 'line': 22, 'num': 6}, 'offset': 63}]

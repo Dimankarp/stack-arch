@@ -4,7 +4,6 @@ import logging
 import re
 import sys
 
-import preamble
 from forthc_exceptions import (
     BareBeginUntilError,
     BareConditionalError,
@@ -80,6 +79,12 @@ class MemorySection:
             if "operand" in word and isinstance(word["operand"], MemoryAddress):
                 word["operand"] = word["operand"].compute()
         return allocated
+
+
+import preamble  # noqa: E402
+# Avoiding circular dep. - Valid since preambule module is
+# basically just a code cut out from this exact file
+# for readability sake
 
 
 class Token:
@@ -253,7 +258,7 @@ def process_semicolon(token: Token, t: Translator):
 def process_if(token: Token, t: Translator):
     if ":" not in map(lambda x: x["token"], t.token_stack):
         raise BareConditionalError(token)
-    jz_instr = {"opcode": Opcode.JMPZ, "token": vars(token)}
+    jz_instr = {"opcode": Opcode.JMPZ, "operand": -1,  "token": vars(token)}
     t.section.push(jz_instr)
     t.token_stack.append({"token": "if", "instr_obj": jz_instr})
 
@@ -261,7 +266,7 @@ def process_if(token: Token, t: Translator):
 def process_else(token: Token, t: Translator):
     if len(t.token_stack) == 0 or t.token_stack[-1]["token"] != "if":
         raise IfElseTreeError(token)
-    end_jmp_instr = {"opcode": Opcode.JMP, "token": vars(token)}
+    end_jmp_instr = {"opcode": Opcode.JMP, "operand": -1, "token": vars(token)}
     t.section.push(end_jmp_instr)
     t.token_stack[-1]["instr_obj"]["operand"] = t.section.offset_addr()
     t.token_stack.append({"token": "else", "instr_obj": end_jmp_instr})
@@ -293,7 +298,7 @@ def process_leave(token: Token, t: Translator):
             ]
         )
     header = headers[0]
-    jmp_inst = {"opcode": Opcode.JMP, "token": vars(token)}
+    jmp_inst = {"opcode": Opcode.JMP, "operand": -1, "token": vars(token)}
     t.section.push(jmp_inst)
     header["leave_jmps"] = [*header.get("leave_jmps", []), jmp_inst]
 
@@ -465,45 +470,37 @@ def main(args):
     code = translate(src, args.io_adr, args.start_adr)
 
     write_code(args.target, code)
-    logging.info("Translated successfully. Wrote to %s", args.target)
+    lines_count = len(src.split('\n'))
+    instructions_count = len(code)
+    print(f"Translated successfully. Source LoC: {lines_count}  Machine Instructions: {instructions_count}")
 
 
+parser = argparse.ArgumentParser(
+    description="Simple forth-like language translator",
+    epilog="It's sallot and not allot here! What allot even stands for?!",
+)
+parser.add_argument("source", metavar="SOURCE", help="a source file with forth code to translate")
+parser.add_argument("target", metavar="TARGET", help="a target file to write translated json to")
+parser.add_argument(
+    "-s",
+    "--start-adr",
+    dest="start_adr",
+    type=int,
+    metavar="START_ADR",
+    required=False,
+    default=10,
+    help="an address from which the program exectuion starts (first in PC)",
+)
+parser.add_argument(
+    "-d",
+    "--device-adr",
+    dest="io_adr",
+    type=int,
+    metavar="IO_ADR",
+    required=False,
+    default=0,
+    help="an address mapped to the IO device",
+)
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Simple forth-like language translator",
-        epilog="It's sallot and not allot here! What allot even stands for?!",
-    )
-    parser.add_argument("source", metavar="SOURCE", help="a source file with forth code to translate")
-    parser.add_argument("target", metavar="TARGET", help="a target file to write translated json to")
-    parser.add_argument(
-        "-s",
-        "--start-adr",
-        dest="start_adr",
-        type=int,
-        metavar="START_ADR",
-        required=False,
-        default=10,
-        help="an address from which the program exectuion starts (first in PC)",
-    )
-    parser.add_argument(
-        "-d",
-        "--device-adr",
-        dest="io_adr",
-        type=int,
-        metavar="IO_ADR",
-        required=False,
-        default=0,
-        help="an address mapped to the IO device",
-    )
     args = parser.parse_args()
-    formatter = logging.Formatter("[%(levelname)s] %(message)s")
-
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setFormatter(formatter)
-    stdout_handler.setLevel(logging.DEBUG)
-    logger.addHandler(stdout_handler)
-
     main(args)
