@@ -405,9 +405,10 @@ stck_wr  │            │                        sp_latch = 0
 Запуск golden-тестов: [golden_test.py](./golden_test.py)
 
 Тесты:
-    *[tests/hello.yml](tests/hello.yml) - Печатает "Hello World!" в stdout
-    *[test/hello_user_name.yml](test/hello_user_name.yml) - Запрашивает имя пользовается и приветствует его
-    *[test/cat.yml](test/cat.yml) - Выводит символы, переданные в stdin, до истощения буфера
-    *[test/prob1.yml](test/prob1.yml) - Euler problem 1
-    *[test/bubble_sort.yml](test/bubble_sort.yml) - Сортировка пузырьком для проверки Cache'а
-    *[test/factorial.yml](test/factorial.yml) - Подсчёт факториала, проверяющий рекурсию процедур
+
+* [tests/hello.yml](tests/hello.yml) - Печатает "Hello World!" в stdout
+* [test/hello_user_name.yml](tests/hello_user_name.yml) - Запрашивает имя пользовается и приветствует его
+* [test/cat.yml](tests/cat.yml) - Выводит символы, переданные в stdin, до истощения буфера
+* [test/prob1.yml](tests/prob1.yml) - Euler problem 1
+* [test/bubble_sort.yml](tests/bubble_sort.yml) - Сортировка пузырьком для проверки Cache'а
+* [test/factorial.yml](tests/factorial.yml) - Подсчёт факториала, проверяющий рекурсию процедур
