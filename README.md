@@ -412,3 +412,230 @@ stck_wr  │            │                        sp_latch = 0
 * [test/prob1.yml](tests/prob1.yml) - Euler problem 1
 * [test/bubble_sort.yml](tests/bubble_sort.yml) - Сортировка пузырьком для проверки Cache'а
 * [test/factorial.yml](tests/factorial.yml) - Подсчёт факториала, проверяющий рекурсию процедур
+
+CI полностью взять из референсной работы.
+
+Запуск тестов: `poetry run pytest . -v`
+
+Обновление:  `poetry run pytest . -v --update-goldens`
+
+CI при помощи Github Action:
+
+``` yaml
+name: Python CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ./*.py
+      - ./*.lock
+      - ./pyproject.toml
+      - ./tests/*
+      - .github/workflows/python.yaml
+  pull_request:
+    branches:
+      - master
+    paths:
+      - ./*.py
+      - ./*.lock
+      - ./pyproject.toml
+      - ./tests/*
+      - .github/workflows/python.yaml
+defaults:
+  run:
+    working-directory: ./
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Run tests and collect coverage
+        run: |
+          poetry run coverage run -m pytest .
+          poetry run coverage report -m
+        env:
+          CI: true
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Check code formatting with Ruff
+        run: poetry run ruff format --check .
+
+      - name: Run Ruff linters
+        run: poetry run ruff check .
+```
+
+Пример использования и журнал работы процессора на примере `cat`:
+
+``` shell
+$ cat ./programs/cat.f
+: cat
+        begin
+                key dup dup if
+                        emit  
+                then
+        0 = until
+;
+cat
+$ python forthc.py -d 0 -s 10 ./programs/cat.f target.out
+Translated successfully. Source LoC: 8  Machine Instructions: 13
+$ cat target.out
+[{"opcode": "call", "operand": 12, "token": {"val": "cat", "line": 8, "num": 1}, "offset": 10},
+ {"opcode": "halt", "offset": 11},
+ {"opcode": "push", "operand": 0, "token": {"val": "key", "line": 3, "num": 1}, "offset": 12},
+ {"opcode": "fetch", "token": {"val": "key", "line": 3, "num": 1}, "offset": 13},
+ {"opcode": "duplicate", "token": {"val": "dup", "line": 3, "num": 2}, "offset": 14},
+ {"opcode": "duplicate", "token": {"val": "dup", "line": 3, "num": 3}, "offset": 15},
+ {"opcode": "jump on zero", "operand": 19, "token": {"val": "if", "line": 3, "num": 4}, "offset": 16},
+ {"opcode": "push", "operand": 0, "token": {"val": "emit", "line": 4, "num": 1}, "offset": 17},
+ {"opcode": "store", "token": {"val": "emit", "line": 4, "num": 1}, "offset": 18},
+ {"opcode": "push", "operand": 0, "token": {"val": "0", "line": 6, "num": 1}, "offset": 19},
+ {"opcode": "equal", "token": {"val": "=", "line": 6, "num": 2}, "offset": 20},
+ {"opcode": "jump on zero", "operand": 12, "token": {"val": "until", "line": 6, "num": 3}, "offset": 21},
+ {"opcode": "return", "token": {"val": ";", "line": 7, "num": 1}, "offset": 22}]
+$ python machine.py -j -d 0 -s 10 -m 1024 -c 32 target.out -i "St"
+[JRNL]   TCK:     0   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 0): []...
+[JRNL] RS (LEN: 0): []...
+[JRNL]    PC:    10    IR: {}
+[JRNL]   ADR:     0   MEM: 0
+[JRNL]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+[JRNL] Prefetch finishing: 0 extra ticks
+[JRNL] Cache read 10 miss for 0 extra ticks
+[JRNL] Cache insert 10
+[JRNL] Memory store/fetch: 10 extra ticks
+
+[JRNL] Started PARALLEL FETCHING of 14:
+[JRNL] Cache miss on lookup 14
+[JRNL] Cache insert 14
+[JRNL] planned finish on 22 tick:
+
+[JRNL] In total CPU waited for 10 extra ticks
+
+[JRNL]   TCK:    11   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 0): []...
+[JRNL] RS (LEN: 0): []...
+[JRNL]    PC:    10    IR: {}
+[JRNL]   ADR:    10   MEM: CALL  12 'cat'@8:1
+[JRNL]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+[JRNL]   TCK:    12   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 0): []...
+[JRNL] RS (LEN: 0): []...
+[JRNL]    PC:    11    IR: CALL  12 'cat'@8:1
+[JRNL]   ADR:    10   MEM: CALL  12 'cat'@8:1
+[JRNL]   mPC:     2 mPROG: mPCLatch.IR
+
+...
+
+[JRNL]   TCK:   193   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 1): [0]...
+[JRNL] RS (LEN: 1): [11]...
+[JRNL]    PC:    13    IR: PUSH   0 'key'@3:1
+[JRNL]   ADR:    12   MEM: PUSH   0 'key'@3:1
+[JRNL]   mPC:     0 mPROG: ARLatch.PC, MemSignal.MemRD
+
+[JRNL] Prefetch finishing: 0 extra ticks
+[JRNL] Cache read 13 hit for 0 extra ticks
+[JRNL] In total CPU waited for 0 extra ticks
+
+[JRNL]   TCK:   194   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 1): [0]...
+[JRNL] RS (LEN: 1): [11]...
+[JRNL]    PC:    13    IR: PUSH   0 'key'@3:1
+[JRNL]   ADR:    13   MEM: FETCH 'key'@3:1
+[JRNL]   mPC:     1 mPROG: DPSignal.IRLatch, PCLatch.PLUS1
+
+[JRNL]   TCK:   195   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 1): [0]...
+[JRNL] RS (LEN: 1): [11]...
+[JRNL]    PC:    14    IR: FETCH 'key'@3:1
+[JRNL]   ADR:    13   MEM: FETCH 'key'@3:1
+[JRNL]   mPC:     2 mPROG: mPCLatch.IR
+
+[JRNL]   TCK:   196   TOS:     0   ALU:     0
+[JRNL] DS (LEN: 1): [0]...
+[JRNL] RS (LEN: 1): [11]...
+[JRNL]    PC:    14    IR: FETCH 'key'@3:1
+[JRNL]   ADR:    13   MEM: FETCH 'key'@3:1
+[JRNL]   mPC:    12 mPROG: ALUop, ARLatch.ALU, MemSignal.MemRD
+
+[JRNL] Prefetch finishing: 0 extra ticks
+[WARN] Input buffer was empty on fetch!
+[INFO] Cache miss rate: 8.696%
+[INFO] Ticks: 197
+St
+[JRNL] Output Buffer: St
+[JRNL] Output Buffer(ASCII codes): 83, 116
+[WARN] Input buffer was empty on fetch!
+[INFO] Cache miss rate: 8.696%
+[INFO] Ticks: 197
+St
+Cache miss rate: 8.696% Ticks: 197
+```
+
+Пример проверки исходного кода:
+
+``` shell
+$ poetry run pytest . -v
+====================================================================================== test session starts ======================================================================================                                 
+platform win32 -- Python 3.11.5, pytest-7.4.4, pluggy-1.5.0 -- C:\Users\marin\AppData\Local\pypoetry\Cache\virtualenvs\stack-processor-ibGfME1p-py3.11\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\marin\OneDrive\Documents\ITMOStudies\Computer Architecture\stack_processor
+configfile: pyproject.toml
+plugins: golden-0.2.2
+collected 6 items
+
+golden_test.py::test_forthc_and_machine[tests/bubble_sort.yml] PASSED                                                                                                                [ 16%]
+golden_test.py::test_forthc_and_machine[tests/cat.yml] PASSED                                                                                                                        [ 33%]
+golden_test.py::test_forthc_and_machine[tests/factorial.yml] PASSED                                                                                                                  [ 50%]
+golden_test.py::test_forthc_and_machine[tests/hello.yml] PASSED                                                                                                                      [ 66%]
+golden_test.py::test_forthc_and_machine[tests/hello_user_name.yml] PASSED                                                                                                            [ 83%]
+golden_test.py::test_forthc_and_machine[tests/prob1.yml] PASSED                                                                                                                      [100%]
+
+============================================================================== 6 passed in 145.76s (0:02:25) ============================================================================== 
+
+
+$ poetry run ruff check .
+$ poetry run ruff format .
+10 files left unchanged
+```
+
+```text
+| ФИО                            | алг   | LoC | code байт | code инстр. | инстр. | такт. | вариант |
+| Хороших Дмитрий Максимович | cat   | 1   | -         | 6           | 15     | 28    | ...     |
+```

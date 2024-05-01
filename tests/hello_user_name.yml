@@ -1117,8 +1117,6 @@ out_log: |
   [WAR] Halt!
   [INF] Cache miss rate: 3.977%
   [INF] Ticks: 5844
-  Please, enter your name and press ENTER:
-  Hello, OneLoneCoder Fan
   [DEB] Output Buffer: Please, enter your name and press ENTER:
   Hello, OneLoneCoder Fan
   [DEB] Output Buffer(ASCII codes): 80, 108, 101, 97, 115, 101, 44, 32, 101, 110, 116, 101, 114, 32, 121, 111, 117, 114, 32, 110, 97, 109, 101, 32, 97, 110, 100, 32, 112, 114, 101, 115, 115, 32, 69, 78, 84, 69, 82, 58, 10, 72, 101, 108, 108, 111, 44, 32, 79, 110, 101, 76, 111, 110, 101, 67, 111, 100, 101, 114, 32, 70, 97, 110
