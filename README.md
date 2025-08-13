@@ -1,10 +1,5 @@
 # Stack Processor. Модель и Forth транслятор
 
-* P3217, Хороших Дмитрий Максимович
-* `forth | stack | neum | mc -> hw | tick -> instr | struct | stream | mem | pstr | prob1 | cache`
-
-* Усложнённый вариант
-
 ## Язык программирования
 
 ``` ebnf
